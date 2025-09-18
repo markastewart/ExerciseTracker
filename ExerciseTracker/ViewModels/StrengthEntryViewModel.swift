@@ -1,0 +1,121 @@
+//
+//  StrengthEntryViewModel.swift
+//  ExerciseTracker
+//
+//  Created by Mark A Stewart on 9/17/25.
+//
+
+import Foundation
+import SwiftData
+
+class StrengthEntryViewModel: ObservableObject {
+    @Published var timestamp = Date()
+    @Published var exerciseType: String
+    @Published var sets: Int
+    @Published var reps: Int
+    @Published var weight: Int
+    @Published var strengthTypes: [String] = []
+    
+    private let dataService = ExerciseDataService.shared
+    private let defaultStrengthTypes = ["Ab Crunch",
+                                        "Back Extension",
+                                        "Bicep Curl",
+                                        "Chest Press",
+                                        "Inward Thigh",
+                                        "Lateral Pull",
+                                        "Lateral Raise",
+                                        "Leg Curl",
+                                        "Leg Extensions",
+                                        "Rear Delt",
+                                        "Seated Calf Raise",
+                                        "Seated Row",
+                                        "Shoulder Press",
+                                        "Tricep Extension",
+                                       ]
+    
+    init() {
+        self.timestamp = Date()
+        self.exerciseType = ""
+        self.sets = 3
+        self.reps = 12
+        self.weight = 0
+    }
+    
+    private func setDefaultValues() {
+        self.sets = 3
+        self.reps = 12
+        self.weight = 0
+    }
+    
+        // A function to fetch the most recent entry for a given exercise type
+    func fetchLastStrengthEntry() {
+        let predicate = #Predicate<StrengthExercise> { exercise in
+            exercise.exerciseType == exerciseType
+        }
+        
+        let descriptor = FetchDescriptor(
+            predicate: predicate,
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        
+        do {
+                // If an exercise entry is found, set the view model's properties with the results of the last exercise
+            if let modelContext = dataService.modelContext {
+                if let entry = try? modelContext.fetch(descriptor).first {
+                    self.sets = entry.sets
+                    self.reps = entry.reps
+                    self.weight = entry.weight
+                }
+                else {      // No exercise records of this type exist; use default values
+                    setDefaultValues()
+                }
+            }
+            else {
+                fatalError("Error: Unable to obtain modelContext")
+            }
+        }
+    }
+    
+        // Fetch and sort the exercise types
+    func fetchSortedStrengthTypes() {
+        guard let allExercises = dataService.fetchAllStrengthExercises() else {
+            self.strengthTypes = defaultStrengthTypes
+            return
+        }
+            // Count the frequency of each exercise type
+        var counts: [String: Int] = [:]
+        for exercise in allExercises {
+            counts[exercise.exerciseType, default: 0] += 1
+        }
+            // Get a combined set of all recorded types and default types.
+        let recordedTypes = Set(counts.keys)
+        let allUniqueTypes = recordedTypes.union(defaultStrengthTypes)
+        
+            // Sort the combined list using your criteria.
+        let sortedTypes = allUniqueTypes.sorted { (type1, type2) -> Bool in
+            let count1 = counts[type1] ?? 0
+            let count2 = counts[type2] ?? 0
+            
+                // Primary sort: by count (descending)
+            if count1 != count2 {
+                return count1 > count2
+            } else {
+                // Secondary sort: alphabetical (ascending) for ties
+                return type1 < type2
+            }
+        }
+            // Update the @Published property.
+        self.strengthTypes = sortedTypes
+    }
+    
+    
+    func saveStrength() {
+        let newStrength = StrengthExercise()
+        newStrength.timestamp = timestamp
+        newStrength.exerciseType = exerciseType
+        newStrength.sets = sets
+        newStrength.reps = reps
+        newStrength.weight = weight
+        dataService.save(newStrength)
+    }
+}
