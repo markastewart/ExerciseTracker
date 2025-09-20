@@ -47,9 +47,9 @@ class StrengthEntryViewModel: ObservableObject {
     }
     
     private func setDefaultValues() {
-        self.sets = 3
-        self.reps = 12
-        self.weight = 0
+        sets = 3
+        reps = 12
+        weight = 0
     }
     
         // A function to fetch the most recent entry for a given exercise type
@@ -67,9 +67,9 @@ class StrengthEntryViewModel: ObservableObject {
                 // If an exercise entry is found, set the view model's properties with the results of the last exercise
             if let modelContext = dataService.modelContext {
                 if let entry = try? modelContext.fetch(descriptor).first {
-                    self.sets = entry.sets
-                    self.reps = entry.reps
-                    self.weight = entry.weight
+                    sets = entry.sets
+                    reps = entry.reps
+                    weight = entry.weight
                 }
                 else {      // No exercise records of this type exist; use default values
                     setDefaultValues()
@@ -84,8 +84,8 @@ class StrengthEntryViewModel: ObservableObject {
         // Fetch and sort the exercise types
     func loadSortedStrengthTypes() {
         guard let allExercises = dataService.fetchAllStrengthExercises() else {
-            self.strengthTypes = defaultStrengthTypes
-            self.exerciseType = defaultStrengthTypes.first ?? ""
+            strengthTypes = defaultStrengthTypes
+            exerciseType = defaultStrengthTypes.first ?? ""
             return
         }
             // Count the frequency of each exercise type
@@ -111,7 +111,7 @@ class StrengthEntryViewModel: ObservableObject {
             }
         }
             // Update the @Published property
-        self.strengthTypes = sortedTypes
+        strengthTypes = sortedTypes
     }
     
     

@@ -35,10 +35,10 @@ class CardioEntryViewModel: ObservableObject {
     }
     
     private func setDefaultValues() {
-        self.duration = 0.0
-        self.distance = 0.0
-        self.calories = 0
-        self.incline = 0.0
+        duration = 0.0
+        distance = 0.0
+        calories = 0
+        incline = 0.0
     }
     
         // A function to fetch the most recent entry for a given exercise type
@@ -56,10 +56,10 @@ class CardioEntryViewModel: ObservableObject {
                 // If an exercise entry is found, set the view model's properties with the results of the last exercise
             if let modelContext = dataService.modelContext {
                 if let entry = try? modelContext.fetch(descriptor).first {
-                    self.duration = entry.duration
-                    self.distance = entry.distance
-                    self.calories = entry.calories
-                    self.incline = entry.incline
+                    duration = entry.duration
+                    distance = entry.distance
+                    calories = entry.calories
+                    incline = entry.incline
                 }
                 else {      // No exercise records of this type exist; use default values
                     setDefaultValues()
@@ -75,8 +75,8 @@ class CardioEntryViewModel: ObservableObject {
     func loadSortedCardioTypes() {
         // 1. Fetch all exercises and create a count dictionary.
         guard let allExercises = dataService.fetchAllCardioExercises() else {
-            self.exerciseType = defaultCardioTypes.first ?? ""
-            self.cardioTypes = defaultCardioTypes
+            exerciseType = defaultCardioTypes.first ?? ""
+            cardioTypes = defaultCardioTypes
             return
         }
         
@@ -101,10 +101,8 @@ class CardioEntryViewModel: ObservableObject {
                 return type1 < type2
             }
         }
-            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view. Also populate properties with last exercise values for exercise Type most recently active.
-        self.cardioTypes = sortedTypes
-        self.exerciseType = cardioTypes.first ?? ""
-        loadLastCardioEntry()
+             // Update the @Published property
+        cardioTypes = sortedTypes
     }
     
     func saveCardio() {
