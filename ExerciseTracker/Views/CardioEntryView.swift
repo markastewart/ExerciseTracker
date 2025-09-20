@@ -52,10 +52,10 @@ struct CardioEntryView: View {
         .navigationTitle("Add Cardio Exercise")
         .navigationBarBackButtonHidden()
         .onAppear {
-            viewModel.fetchSortedCardioTypes()
+            viewModel.loadSortedCardioTypes()
         }
         .onChange(of: viewModel.exerciseType) {
-            viewModel.fetchLastCardioEntry()
+            viewModel.loadLastCardioEntry()
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

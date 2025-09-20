@@ -29,9 +29,9 @@ class CardioEntryViewModel: ObservableObject {
         self.incline = 0.0
         
             // Init cardioTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
-        fetchSortedCardioTypes()
+        loadSortedCardioTypes()
         self.exerciseType = cardioTypes.first ?? ""
-        fetchLastCardioEntry()
+        loadLastCardioEntry()
     }
     
     private func setDefaultValues() {
@@ -42,7 +42,7 @@ class CardioEntryViewModel: ObservableObject {
     }
     
         // A function to fetch the most recent entry for a given exercise type
-    func fetchLastCardioEntry() {
+    func loadLastCardioEntry() {
         let predicate = #Predicate<CardioExercise> { exercise in
             exercise.exerciseType == exerciseType
         }
@@ -72,7 +72,7 @@ class CardioEntryViewModel: ObservableObject {
     }
     
         // Fetch and sort the exercise types
-    func fetchSortedCardioTypes() {
+    func loadSortedCardioTypes() {
         // 1. Fetch all exercises and create a count dictionary.
         guard let allExercises = dataService.fetchAllCardioExercises() else {
             self.exerciseType = defaultCardioTypes.first ?? ""
@@ -104,7 +104,7 @@ class CardioEntryViewModel: ObservableObject {
             // Update the @Published properties especially exerciseType for the benefit of the Picker in the view. Also populate properties with last exercise values for exercise Type most recently active.
         self.cardioTypes = sortedTypes
         self.exerciseType = cardioTypes.first ?? ""
-        fetchLastCardioEntry()
+        loadLastCardioEntry()
     }
     
     func saveCardio() {

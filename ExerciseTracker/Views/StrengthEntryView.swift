@@ -45,10 +45,10 @@ struct StrengthEntryView: View {
         .navigationTitle("Add Strength Exercise")
         .navigationBarBackButtonHidden()
         .onAppear {
-            viewModel.fetchSortedStrengthTypes()
+            viewModel.loadSortedStrengthTypes()
         }
         .onChange(of: viewModel.exerciseType) {
-            viewModel.fetchLastStrengthEntry()
+            viewModel.loadLastStrengthEntry()
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

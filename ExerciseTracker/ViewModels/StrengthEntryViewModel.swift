@@ -41,9 +41,9 @@ class StrengthEntryViewModel: ObservableObject {
         self.weight = 0
         
         // Init strengthTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
-        fetchSortedStrengthTypes()
+        loadSortedStrengthTypes()
         self.exerciseType = strengthTypes.first ?? ""
-        fetchLastStrengthEntry()
+        loadLastStrengthEntry()
     }
     
     private func setDefaultValues() {
@@ -53,7 +53,7 @@ class StrengthEntryViewModel: ObservableObject {
     }
     
         // A function to fetch the most recent entry for a given exercise type
-    func fetchLastStrengthEntry() {
+    func loadLastStrengthEntry() {
         let predicate = #Predicate<StrengthExercise> { exercise in
             exercise.exerciseType == exerciseType
         }
@@ -82,7 +82,7 @@ class StrengthEntryViewModel: ObservableObject {
     }
     
         // Fetch and sort the exercise types
-    func fetchSortedStrengthTypes() {
+    func loadSortedStrengthTypes() {
         guard let allExercises = dataService.fetchAllStrengthExercises() else {
             self.strengthTypes = defaultStrengthTypes
             self.exerciseType = defaultStrengthTypes.first ?? ""
