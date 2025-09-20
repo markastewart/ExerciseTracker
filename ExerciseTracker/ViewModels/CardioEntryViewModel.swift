@@ -27,6 +27,8 @@ class CardioEntryViewModel: ObservableObject {
         self.distance = 0.0
         self.calories = 0
         self.incline = 0.0
+        
+        fetchSortedCardioTypes()
     }
     
     private func setDefaultValues() {
@@ -70,6 +72,7 @@ class CardioEntryViewModel: ObservableObject {
     func fetchSortedCardioTypes() {
         // 1. Fetch all exercises and create a count dictionary.
         guard let allExercises = dataService.fetchAllCardioExercises() else {
+            self.exerciseType = defaultCardioTypes[0]
             self.cardioTypes = defaultCardioTypes
             return
         }
@@ -97,6 +100,7 @@ class CardioEntryViewModel: ObservableObject {
         }
             // Update the @Published property.
         self.cardioTypes = sortedTypes
+        self.exerciseType = cardioTypes.first!
     }
     
     func saveCardio() {
