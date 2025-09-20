@@ -40,7 +40,10 @@ class StrengthEntryViewModel: ObservableObject {
         self.reps = 12
         self.weight = 0
         
+        // Init strengthTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         fetchSortedStrengthTypes()
+        self.exerciseType = strengthTypes.first ?? ""
+        fetchLastStrengthEntry()
     }
     
     private func setDefaultValues() {
@@ -107,9 +110,8 @@ class StrengthEntryViewModel: ObservableObject {
                 return type1 < type2
             }
         }
-            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view.
+            // Update the @Published property
         self.strengthTypes = sortedTypes
-        self.exerciseType = strengthTypes.first ?? ""
     }
     
     

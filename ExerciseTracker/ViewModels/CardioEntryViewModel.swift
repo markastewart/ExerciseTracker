@@ -28,7 +28,10 @@ class CardioEntryViewModel: ObservableObject {
         self.calories = 0
         self.incline = 0.0
         
+            // Init cardioTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         fetchSortedCardioTypes()
+        self.exerciseType = cardioTypes.first ?? ""
+        fetchLastCardioEntry()
     }
     
     private func setDefaultValues() {
@@ -98,9 +101,10 @@ class CardioEntryViewModel: ObservableObject {
                 return type1 < type2
             }
         }
-            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view.
+            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view. Also populate properties with last exercise values for exercise Type most recently active.
         self.cardioTypes = sortedTypes
         self.exerciseType = cardioTypes.first ?? ""
+        fetchLastCardioEntry()
     }
     
     func saveCardio() {
