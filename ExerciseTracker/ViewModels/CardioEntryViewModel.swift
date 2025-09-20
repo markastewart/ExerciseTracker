@@ -72,7 +72,7 @@ class CardioEntryViewModel: ObservableObject {
     func fetchSortedCardioTypes() {
         // 1. Fetch all exercises and create a count dictionary.
         guard let allExercises = dataService.fetchAllCardioExercises() else {
-            self.exerciseType = defaultCardioTypes[0]
+            self.exerciseType = defaultCardioTypes.first ?? ""
             self.cardioTypes = defaultCardioTypes
             return
         }
@@ -98,9 +98,9 @@ class CardioEntryViewModel: ObservableObject {
                 return type1 < type2
             }
         }
-            // Update the @Published property.
+            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view.
         self.cardioTypes = sortedTypes
-        self.exerciseType = cardioTypes.first!
+        self.exerciseType = cardioTypes.first ?? ""
     }
     
     func saveCardio() {

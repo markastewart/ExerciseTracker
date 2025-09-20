@@ -39,6 +39,8 @@ class StrengthEntryViewModel: ObservableObject {
         self.sets = 3
         self.reps = 12
         self.weight = 0
+        
+        fetchSortedStrengthTypes()
     }
     
     private func setDefaultValues() {
@@ -80,6 +82,7 @@ class StrengthEntryViewModel: ObservableObject {
     func fetchSortedStrengthTypes() {
         guard let allExercises = dataService.fetchAllStrengthExercises() else {
             self.strengthTypes = defaultStrengthTypes
+            self.exerciseType = defaultStrengthTypes.first ?? ""
             return
         }
             // Count the frequency of each exercise type
@@ -104,8 +107,9 @@ class StrengthEntryViewModel: ObservableObject {
                 return type1 < type2
             }
         }
-            // Update the @Published property.
+            // Update the @Published properties especially exerciseType for the benefit of the Picker in the view.
         self.strengthTypes = sortedTypes
+        self.exerciseType = strengthTypes.first ?? ""
     }
     
     
