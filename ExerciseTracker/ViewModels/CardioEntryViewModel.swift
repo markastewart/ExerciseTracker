@@ -30,7 +30,7 @@ class CardioEntryViewModel: ObservableObject {
         
             // Init cardioTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         loadSortedCardioTypes()
-        self.exerciseType = cardioTypes.first ?? ""
+        exerciseType = cardioTypes.first ?? ""
         loadLastCardioEntry()
     }
     

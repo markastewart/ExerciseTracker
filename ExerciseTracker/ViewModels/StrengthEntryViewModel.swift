@@ -42,7 +42,7 @@ class StrengthEntryViewModel: ObservableObject {
         
         // Init strengthTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         loadSortedStrengthTypes()
-        self.exerciseType = strengthTypes.first ?? ""
+        exerciseType = strengthTypes.first ?? ""
         loadLastStrengthEntry()
     }
     

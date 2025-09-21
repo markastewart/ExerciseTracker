@@ -10,12 +10,26 @@ import Charts
 import SwiftData
 import Foundation
 
+struct DashboardContainerView: View {
+    @Environment(\.modelContext) private var context
+
+    var body: some View {
+        DashboardView(viewModel: DashboardViewModel(context: context))
+    }
+}
+
 struct DashboardView: View {
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
     @State private var endDate = Date()
     @State private var showDataSyncSheet = false
+    
+    @StateObject private var viewModel: DashboardViewModel
+
+    init(viewModel: DashboardViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
         // This computed property ensures the date range is always correct
     private var dateRange: ClosedRange<Date> {
@@ -50,6 +64,21 @@ struct DashboardView: View {
                     
                         // Strength Progress Section
                     StrengthProgressView(exercises: allStrength.filter { dateRange.contains($0.timestamp) })
+                    
+                        // Last Recorded Entry Section
+                    if let exercise = viewModel.lastExercise {
+                        switch exercise {
+                        case .cardio(let c):
+                            LastEntryAddedView(exerciseData: (type: "Cardio", exercise: c))
+                        case .strength(let s):
+                            LastEntryAddedView(exerciseData: (type: "Strength", exercise: s))
+                        }
+                    } else {
+                        Text("No exercises recorded yet.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .padding()
+                    }
                 }
             }
             .background(Color(.systemGray6))
@@ -64,6 +93,7 @@ struct DashboardView: View {
                     }
                 }
             }
+            
             .sheet(isPresented: $showDataSyncSheet) {
                 DataSyncView()
                     .presentationDetents([.fraction(0.3)])
@@ -73,5 +103,5 @@ struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView()
+//    DashboardView()
 }
