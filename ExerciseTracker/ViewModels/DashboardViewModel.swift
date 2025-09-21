@@ -53,7 +53,7 @@ final class DashboardViewModel: ObservableObject {
     }
 
     // MARK: - Helpers
-    private func refreshLastExercise() {
+    func refreshLastExercise() {
         // Fetch newest Cardio
         let latestCardio = try? context.fetch(
             FetchDescriptor<CardioExercise>(

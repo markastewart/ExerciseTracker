@@ -93,7 +93,12 @@ struct DashboardView: View {
                     }
                 }
             }
-            
+            .onChange(of: allCardio, {
+                viewModel.refreshLastExercise()
+            })
+            .onChange(of: allStrength, {
+                viewModel.refreshLastExercise()
+            })
             .sheet(isPresented: $showDataSyncSheet) {
                 DataSyncView()
                     .presentationDetents([.fraction(0.3)])
