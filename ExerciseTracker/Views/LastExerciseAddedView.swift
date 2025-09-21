@@ -6,12 +6,22 @@
 //
 
 import SwiftUI
+import SwiftUI
 import SwiftData
 
-    // MARK: - Last Entry View
+// MARK: - Last Entry View
 
 struct LastEntryAddedView: View {
-    var exerciseData: (type: String, exercise: any SwiftData.PersistentModel)
+    // This view now takes a single, non-optional enum.
+    // The parent view is responsible for ensuring this data exists.
+    var exercise: AnyExercise
+    
+    // Date formatter for consistent date display
+    private static var shortDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -20,26 +30,33 @@ struct LastEntryAddedView: View {
                 .padding(.horizontal)
             
             VStack(alignment: .leading, spacing: 5) {
-                if let cardio = exerciseData.exercise as? CardioExercise {
-                        // Display Cardio properties
+                // Use a switch statement on the enum to display the correct data.
+                switch exercise {
+                case .cardio(let cardio):
                     HStack {
-                        Text("Date: \(DateFormatter.shortDate.string(from: cardio.timestamp))")
                         Text("Exercise: \(cardio.exerciseType)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Text("Date: \(Self.shortDateFormatter.string(from: cardio.timestamp))")
                     }
                     HStack {
                         Text("Duration: \(Int(cardio.duration)) min")
                         Text("Distance: \(cardio.distance, specifier: "%.2f") mi")
                     }
+                    
                     HStack {
                         Text("Calories: \(cardio.calories)")
                         Text("Incline: \(cardio.incline, specifier: "%.1f")")
                     }
-                } else if let strength = exerciseData.exercise as? StrengthExercise {
-                        // Display Strength properties
-                    HStack {
-                        Text("Date: \(DateFormatter.shortDate.string(from: strength.timestamp))")
-                        Text("Exercise: \(strength.exerciseType)")
-                    }
+                case .strength(let strength):
+                    // Display Strength properties
+                    Text(strength.exerciseType)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("Date: \(Self.shortDateFormatter.string(from: strength.timestamp))")
+                    
                     HStack {
                         Text("Sets: \(strength.sets)")
                         Text("Reps: \(strength.reps)")
@@ -56,8 +73,4 @@ struct LastEntryAddedView: View {
         .shadow(radius: 5)
         .padding(.horizontal)
     }
-}
-
-#Preview {
-    //LastEntryAddedView(.constant)
 }

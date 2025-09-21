@@ -1,10 +1,3 @@
-//
-//  DashboardView.swift
-//  ExerciseTracker
-//
-//  Created by Mark A Stewart on 9/17/25.
-//
-
 import SwiftUI
 import Charts
 import SwiftData
@@ -14,7 +7,7 @@ struct DashboardContainerView: View {
     @Environment(\.modelContext) private var context
 
     var body: some View {
-        DashboardView(viewModel: DashboardViewModel(context: context))
+        DashboardView(viewModel: DashboardViewModel())
     }
 }
 
@@ -31,7 +24,7 @@ struct DashboardView: View {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
     
-        // This computed property ensures the date range is always correct
+    // This computed property ensures the date range is always correct
     private var dateRange: ClosedRange<Date> {
         let normalizedStartDate = Calendar.current.startOfDay(for: startDate)
         let normalizedEndDate = Date()
@@ -59,20 +52,16 @@ struct DashboardView: View {
                         }
                         .padding(.horizontal)
                     }
-                        // Cardio Progress Section
+                    
+                    // Cardio Progress Section
                     CardioProgressView(exercises: allCardio.filter { dateRange.contains($0.timestamp) })
                     
-                        // Strength Progress Section
+                    // Strength Progress Section
                     StrengthProgressView(exercises: allStrength.filter { dateRange.contains($0.timestamp) })
                     
-                        // Last Recorded Entry Section
+                    // Last Recorded Entry Section
                     if let exercise = viewModel.lastExercise {
-                        switch exercise {
-                        case .cardio(let c):
-                            LastEntryAddedView(exerciseData: (type: "Cardio", exercise: c))
-                        case .strength(let s):
-                            LastEntryAddedView(exerciseData: (type: "Strength", exercise: s))
-                        }
+                        LastEntryAddedView(exercise: exercise)
                     } else {
                         Text("No exercises recorded yet.")
                             .font(.subheadline)
@@ -105,8 +94,4 @@ struct DashboardView: View {
             }
         }
     }
-}
-
-#Preview {
-//    DashboardView()
 }
