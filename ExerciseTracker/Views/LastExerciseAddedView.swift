@@ -11,7 +11,7 @@ import SwiftData
 
 // MARK: - Last Entry View
 
-struct LastEntryAddedView: View {
+struct LastExerciseAddedView: View {
     // This view now takes a single, non-optional enum.
     // The parent view is responsible for ensuring this data exists.
     var exercise: AnyExercise

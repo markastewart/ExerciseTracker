@@ -3,32 +3,23 @@ import Charts
 import SwiftData
 import Foundation
 
-struct DashboardContainerView: View {
-    @Environment(\.modelContext) private var context
-
-    var body: some View {
-        DashboardView(viewModel: DashboardViewModel())
-    }
-}
-
 struct DashboardView: View {
+    @StateObject private var viewModel: DashboardViewModel
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
     @State private var endDate = Date()
     @State private var showDataSyncSheet = false
     
-    @StateObject private var viewModel: DashboardViewModel
-
-    init(viewModel: DashboardViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
-    
-    // This computed property ensures the date range is always correct
+        // Computed property ensures date range is always correct
     private var dateRange: ClosedRange<Date> {
         let normalizedStartDate = Calendar.current.startOfDay(for: startDate)
         let normalizedEndDate = Date()
         return normalizedStartDate...normalizedEndDate
+    }
+    
+    init(viewModel: DashboardViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -53,15 +44,15 @@ struct DashboardView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Cardio Progress Section
+                        // Cardio Progress Section
                     CardioProgressView(exercises: allCardio.filter { dateRange.contains($0.timestamp) })
                     
-                    // Strength Progress Section
+                        // Strength Progress Section
                     StrengthProgressView(exercises: allStrength.filter { dateRange.contains($0.timestamp) })
                     
-                    // Last Recorded Entry Section
-                    if let exercise = viewModel.lastExercise {
-                        LastEntryAddedView(exercise: exercise)
+                        // Display Last Recorded Exercise if there is one.
+                    if let lastExercise = viewModel.lastExercise {
+                        LastExerciseAddedView(exercise: lastExercise)
                     } else {
                         Text("No exercises recorded yet.")
                             .font(.subheadline)
@@ -82,12 +73,10 @@ struct DashboardView: View {
                     }
                 }
             }
-            .onChange(of: allCardio, {
+                // If cardio exercise or strength exercise was added - then refresh last exercise data.
+            .onChange(of: allCardio.count + allStrength.count) {
                 viewModel.refreshLastExercise()
-            })
-            .onChange(of: allStrength, {
-                viewModel.refreshLastExercise()
-            })
+            }
             .sheet(isPresented: $showDataSyncSheet) {
                 DataSyncView()
                     .presentationDetents([.fraction(0.3)])

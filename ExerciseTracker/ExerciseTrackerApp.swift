@@ -31,7 +31,7 @@ struct ExerciseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            DashboardContainerView()
+            DashboardView(viewModel: DashboardViewModel())
                 .environment(\.modelContext, sharedModelContainer.mainContext)
         }
         .modelContainer(sharedModelContainer)
