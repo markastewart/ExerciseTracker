@@ -4,7 +4,7 @@ import SwiftData
 import Foundation
 
 struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel
+    @StateObject private var viewModel =  DashboardViewModel()
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
@@ -16,10 +16,6 @@ struct DashboardView: View {
         let normalizedStartDate = Calendar.current.startOfDay(for: startDate)
         let normalizedEndDate = Date()
         return normalizedStartDate...normalizedEndDate
-    }
-    
-    init(viewModel: DashboardViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {

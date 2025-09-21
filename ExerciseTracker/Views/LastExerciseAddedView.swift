@@ -12,11 +12,10 @@ import SwiftData
 // MARK: - Last Entry View
 
 struct LastExerciseAddedView: View {
-    // This view now takes a single, non-optional enum.
-    // The parent view is responsible for ensuring this data exists.
+        // This view now takes a single, non-optional enum. The parent view is responsible for ensuring this data exists.
     var exercise: AnyExercise
     
-    // Date formatter for consistent date display
+        // Date formatter for consistent date display
     private static var shortDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -30,38 +29,38 @@ struct LastExerciseAddedView: View {
                 .padding(.horizontal)
             
             VStack(alignment: .leading, spacing: 5) {
-                // Use a switch statement on the enum to display the correct data.
+                    // Use a switch statement on the enum to display the correct data.
                 switch exercise {
-                case .cardio(let cardio):
-                    HStack {
-                        Text("Exercise: \(cardio.exerciseType)")
+                    case .cardio(let cardio):
+                        HStack {
+                            Text("Exercise: \(cardio.exerciseType)")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text("Date: \(Self.shortDateFormatter.string(from: cardio.timestamp))")
+                        }
+                        HStack {
+                            Text("Duration: \(Int(cardio.duration)) min")
+                            Text("Distance: \(cardio.distance, specifier: "%.2f") mi")
+                        }
+                        
+                        HStack {
+                            Text("Calories: \(cardio.calories)")
+                            Text("Incline: \(cardio.incline, specifier: "%.1f")")
+                        }
+                    case .strength(let strength):
+                            // Display Strength properties
+                        Text(strength.exerciseType)
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Date: \(Self.shortDateFormatter.string(from: cardio.timestamp))")
-                    }
-                    HStack {
-                        Text("Duration: \(Int(cardio.duration)) min")
-                        Text("Distance: \(cardio.distance, specifier: "%.2f") mi")
-                    }
-                    
-                    HStack {
-                        Text("Calories: \(cardio.calories)")
-                        Text("Incline: \(cardio.incline, specifier: "%.1f")")
-                    }
-                case .strength(let strength):
-                    // Display Strength properties
-                    Text(strength.exerciseType)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    
-                    Text("Date: \(Self.shortDateFormatter.string(from: strength.timestamp))")
-                    
-                    HStack {
-                        Text("Sets: \(strength.sets)")
-                        Text("Reps: \(strength.reps)")
-                        Text("Weight: \(strength.weight) lbs")
-                    }
+                        Text("Date: \(Self.shortDateFormatter.string(from: strength.timestamp))")
+                        
+                        HStack {
+                            Text("Sets: \(strength.sets)")
+                            Text("Reps: \(strength.reps)")
+                            Text("Weight: \(strength.weight) lbs")
+                        }
                 }
             }
             .padding(.horizontal)
