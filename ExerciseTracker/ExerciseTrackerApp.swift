@@ -37,9 +37,7 @@ struct ExerciseApp: App {
         .modelContainer(sharedModelContainer)
     }
     
-        // A temporary workaround to set the ModelContext in the data service
-        // This is not standard but necessary for this code to work as presented
-        // without using a fully-fledged Dependency Injection framework.
+        // A temporary workaround to set the ModelContext in the data service This is not standard but necessary for this code to work as presented without using a fully-fledged Dependency Injection framework.
     init() {
         ExerciseDataService.shared.setModelContext(sharedModelContainer.mainContext)
     }
