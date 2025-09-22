@@ -15,13 +15,6 @@ struct LastExerciseAddedView: View {
         // This view now takes a single, non-optional enum. The parent view is responsible for ensuring this data exists.
     var exercise: AnyExercise
     
-        // Date formatter for consistent date display
-    private static var shortDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        return formatter
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Last Recorded Exercise")
@@ -37,7 +30,7 @@ struct LastExerciseAddedView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text("Date: \(Self.shortDateFormatter.string(from: cardio.timestamp))")
+                            Text("Date: \(DateFormatter.shortDate.string(from: cardio.timestamp))")
                         }
                         HStack {
                             Text("Duration: \(Int(cardio.duration)) min")
@@ -54,7 +47,7 @@ struct LastExerciseAddedView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Date: \(Self.shortDateFormatter.string(from: strength.timestamp))")
+                        Text("Date: \(DateFormatter.shortDate.string(from: strength.timestamp))")
                         
                         HStack {
                             Text("Sets: \(strength.sets)")
