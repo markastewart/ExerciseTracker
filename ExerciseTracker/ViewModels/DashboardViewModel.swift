@@ -31,14 +31,13 @@ enum AnyExercise: Identifiable {
 
 final class DashboardViewModel: ObservableObject {
     @Published var lastExercise: AnyExercise?
-
-    //private let context: ModelContext
+    
     private let dataService = ExerciseDataService.shared
     private var cancellable: AnyCancellable?
 
     // MARK: - Init
     init() {
-        // Listen for any changes in the context (insert/update/delete)
+            // Listen for any changes in the context (insert/update/delete)
         if let modelContext = dataService.modelContext {
             cancellable = NotificationCenter.default
                 .publisher(for: .NSManagedObjectContextObjectsDidChange, object: modelContext)
@@ -47,14 +46,13 @@ final class DashboardViewModel: ObservableObject {
                     self?.refreshLastExercise()
                 }
         }
-
-        // Initial fetch
+            // Initial fetch
         refreshLastExercise()
     }
 
     // MARK: - Helpers
     func refreshLastExercise() {
-        // Fetch newest Cardio
+            // Fetch newest Cardio
         if let modelContext = dataService.modelContext {
             let latestCardio = try? modelContext.fetch(
                 FetchDescriptor<CardioExercise>(
