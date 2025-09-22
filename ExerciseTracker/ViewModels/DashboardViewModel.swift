@@ -16,15 +16,15 @@ enum AnyExercise: Identifiable {
 
     var id: PersistentIdentifier {
         switch self {
-        case .cardio(let c): return c.persistentModelID
-        case .strength(let s): return s.persistentModelID
+            case .cardio(let cardioEnum): return cardioEnum.persistentModelID
+            case .strength(let strengthEnum): return strengthEnum.persistentModelID
         }
     }
 
     var timestamp: Date {
         switch self {
-        case .cardio(let c): return c.timestamp
-        case .strength(let s): return s.timestamp
+        case .cardio(let cardioEnum): return cardioEnum.timestamp
+        case .strength(let strengthEnum): return strengthEnum.timestamp
         }
     }
 }
@@ -54,27 +54,22 @@ final class DashboardViewModel: ObservableObject {
     func refreshLastExercise() {
             // Fetch newest Cardio
         if let modelContext = dataService.modelContext {
-            let latestCardio = try? modelContext.fetch(
-                FetchDescriptor<CardioExercise>(
-                    sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-                )
+            
+            let latestCardio = try? modelContext.fetch (
+                FetchDescriptor<CardioExercise>( sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
             ).first
             
-                // Fetch newest Strength
             let latestStrength = try? modelContext.fetch(
-                FetchDescriptor<StrengthExercise>(
-                    sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-                )
+                FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
             ).first
             
-                // Determine most recent
             switch (latestCardio, latestStrength) {
-                case let (c?, s?):
-                    lastExercise = c.timestamp >= s.timestamp ? .cardio(c) : .strength(s)
-                case let (c?, nil):
-                    lastExercise = .cardio(c)
-                case let (nil, s?):
-                    lastExercise = .strength(s)
+                case let (cardio?, strength?):
+                    lastExercise = cardio.timestamp >= strength.timestamp ? .cardio(cardio) : .strength(strength)
+                case let (cardio?, nil):
+                    lastExercise = .cardio(cardio)
+                case let (nil, strength?):
+                    lastExercise = .strength(strength)
                 default:
                     lastExercise = nil
             }
