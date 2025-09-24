@@ -16,6 +16,7 @@ class CardioEntryViewModel: ObservableObject {
     @Published var calories: Int
     @Published var incline: Double
     @Published var cardioTypes: [String] = []
+    @Published var recordedDate: Date
     
     private let dataService = ExerciseDataService.shared
     private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]
@@ -27,6 +28,7 @@ class CardioEntryViewModel: ObservableObject {
         self.distance = 0.0
         self.calories = 0
         self.incline = 0.0
+        self.recordedDate = Date()
         
             // Init cardioTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         loadSortedCardioTypes()
@@ -113,6 +115,7 @@ class CardioEntryViewModel: ObservableObject {
         newCardio.distance = distance
         newCardio.calories = calories
         newCardio.incline = incline
+        newCardio.recordedDate = recordedDate
         dataService.save(newCardio)
     }
 }

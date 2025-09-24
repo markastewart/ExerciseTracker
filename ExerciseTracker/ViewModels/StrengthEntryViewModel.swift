@@ -15,6 +15,7 @@ class StrengthEntryViewModel: ObservableObject {
     @Published var reps: Int
     @Published var weight: Int
     @Published var strengthTypes: [String] = []
+    @Published var recordedDate = Date()
     
     private let dataService = ExerciseDataService.shared
     private let defaultStrengthTypes = ["Ab Crunch",
@@ -39,6 +40,7 @@ class StrengthEntryViewModel: ObservableObject {
         self.sets = 3
         self.reps = 12
         self.weight = 0
+        self.recordedDate = Date()
         
         // Init strengthTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
         loadSortedStrengthTypes()
@@ -122,6 +124,7 @@ class StrengthEntryViewModel: ObservableObject {
         newStrength.sets = sets
         newStrength.reps = reps
         newStrength.weight = weight
+        newStrength.recordedDate = recordedDate
         dataService.save(newStrength)
     }
 }

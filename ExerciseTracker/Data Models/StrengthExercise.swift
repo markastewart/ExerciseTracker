@@ -15,6 +15,7 @@ final class StrengthExercise {
     var sets: Int = 0
     var reps: Int = 0
     var weight: Int = 0
+    var recordedDate: Date = Date()
 
     init() {
     }
@@ -25,5 +26,6 @@ final class StrengthExercise {
         case sets = 2
         case reps = 3
         case weight = 4
+        case recordedDate = 5
     }
 }

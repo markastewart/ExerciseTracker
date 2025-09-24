@@ -16,6 +16,7 @@ final class CardioExercise {
     var distance: Double = 0.0
     var calories: Int = 0
     var incline: Double = 0.0
+    var recordedDate: Date = Date()
 
     init() {
     }
@@ -27,6 +28,7 @@ final class CardioExercise {
         case distance = 3
         case calories = 4
         case incline = 5
+        case recordedDate = 6
     }
 }
 

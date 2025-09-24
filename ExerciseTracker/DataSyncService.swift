@@ -95,7 +95,8 @@ class DataSyncService {
                    let duration = TimeInterval(components[CardioExercise.columnIndex.duration].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let distance = Double(components[CardioExercise.columnIndex.distance].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let calories = Int(components[CardioExercise.columnIndex.calories].trimmingCharacters(in: .whitespacesAndNewlines)),
-                   let incline = Double(components[CardioExercise.columnIndex.incline].trimmingCharacters(in: .whitespacesAndNewlines))
+                   let incline = Double(components[CardioExercise.columnIndex.incline].trimmingCharacters(in: .whitespacesAndNewlines)),
+                   let recordedDate = DateFormatter.shortDate.date(from: components[CardioExercise.columnIndex.recordedDate])
                 {
                     let newCardio = CardioExercise()
                     newCardio.exerciseDate = exerciseDate
@@ -104,6 +105,7 @@ class DataSyncService {
                     newCardio.distance = distance
                     newCardio.calories = calories
                     newCardio.incline = incline
+                    newCardio.recordedDate = recordedDate
                     modelContext.insert(newCardio)
                 }
                 else {
@@ -116,7 +118,8 @@ class DataSyncService {
                    !exerciseType.isEmpty,
                    let sets = Int(components[StrengthExercise.columnIndex.sets].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let reps = Int(components[StrengthExercise.columnIndex.reps].trimmingCharacters(in: .whitespacesAndNewlines)),
-                   let weight = Int(components[StrengthExercise.columnIndex.weight].trimmingCharacters(in: .whitespacesAndNewlines))
+                   let weight = Int(components[StrengthExercise.columnIndex.weight].trimmingCharacters(in: .whitespacesAndNewlines)),
+                   let recordedDate = DateFormatter.shortDate.date(from: components[StrengthExercise.columnIndex.recordedDate])
                 {
                     let newStrength = StrengthExercise()
                     newStrength.exerciseDate = exerciseDate
@@ -124,6 +127,7 @@ class DataSyncService {
                     newStrength.sets = sets
                     newStrength.reps = reps
                     newStrength.weight = weight
+                    newStrength.recordedDate = recordedDate
                     modelContext.insert(newStrength)
                 }
                 else {
