@@ -30,22 +30,21 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 15) {
-
-                    // NEW: Range selector replaces two DatePickers
+                        // Range selector replaces two DatePickers
                     DateRangeSelector(startDate: $startDate, endDate: $endDate)
                         .padding(.leading, 7)
-
-                    // Cardio Progress Section
+                    
+                        // Cardio Progress Section
                     CardioProgressView(
                         exercises: allCardio.filter { dateRange.contains($0.exerciseDate) }
                     )
-
-                    // Strength Progress Section
+                    
+                        // Strength Progress Section
                     StrengthProgressView(
                         exercises: allStrength.filter { dateRange.contains($0.exerciseDate) }
                     )
-
-                    // Last recorded exercise
+                    
+                        // Last recorded exercise
                     if let lastExercise = viewModel.lastExercise {
                         LastExerciseAddedView(exercise: lastExercise)
                     } else {
