@@ -1,9 +1,9 @@
-    //
-    //  LastExerciseAddedView.swift
-    //  ExerciseTracker
-    //
-    //  Created by Mark A Stewart on 9/20/25.
-    //
+//
+//  LastExerciseAddedView.swift
+//  ExerciseTracker
+//
+//  Created by Mark A Stewart on 9/20/25.
+//
 
 import SwiftUI
 import SwiftUI
@@ -22,7 +22,7 @@ struct LastExerciseAddedView: View {
                 case .cardio(let cardio):
                     VStack {
                         HStack {
-                            Text("Last Recorded Exercise - \(DateFormatter.shortDate.string(from: cardio.exerciseDate))")
+                            Text("Last Recorded Exercise (\(DateFormatter.shortDate.string(from: cardio.exerciseDate)))")
                                 .font(.headline)
                             Spacer()
                         }

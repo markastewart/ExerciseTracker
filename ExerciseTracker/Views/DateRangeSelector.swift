@@ -1,0 +1,85 @@
+//
+//  DateRangeSelector.swift
+//  ExerciseTracker
+//
+//  Created by Mark A Stewart on 9/24/25.
+//
+
+import SwiftUI
+import SwiftData
+
+/// Re-usable date range picker with presets + optional custom range
+struct DateRangeSelector: View {
+    enum RangeChoice: String, CaseIterable, Identifiable {
+        case week   = "Last 7 Days"
+        case month  = "Last Month"
+        case six    = "Last 6 Months"
+        case year   = "Last Year"
+        case custom = "Custom"
+        var id: String { rawValue }
+    }
+
+    @Binding var startDate: Date
+    @Binding var endDate: Date
+    @State private var choice: RangeChoice = .week   // default
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Date Range")
+                    .font(.headline)
+                Menu {
+                    ForEach(RangeChoice.allCases) { option in
+                        Button(option.rawValue) {
+                            setDates(for: option)
+                            choice = option
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(choice.rawValue)
+                        Image(systemName: "chevron.down")
+                            .font(.subheadline)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                }
+            }
+            
+            if choice == .custom {
+                HStack {
+                    DatePicker("From", selection: $startDate, in: ...endDate, displayedComponents: .date)
+                    DatePicker("To", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
+                }
+                .font(.headline)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func setDates(for range: RangeChoice) {
+        let now = Date()
+        switch range {
+        case .week:
+            startDate = Calendar.current.date(byAdding: .day, value: -6, to: now)!
+            endDate   = now
+        case .month:
+            startDate = Calendar.current.date(byAdding: .month, value: -1, to: now)!
+            endDate   = now
+        case .six:
+            startDate = Calendar.current.date(byAdding: .month, value: -6, to: now)!
+            endDate   = now
+        case .year:
+            startDate = Calendar.current.date(byAdding: .year, value: -1, to: now)!
+            endDate   = now
+        case .custom:
+            break
+        }
+    }
+}
+
+
+#Preview {
+//    DateRangeSelector()
+}

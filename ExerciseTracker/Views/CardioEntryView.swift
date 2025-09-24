@@ -59,13 +59,18 @@ struct CardioEntryView: View {
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("< Cancel", action: { dismiss() })
+                Button("Cancel") {
+                    dismiss()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.gray)
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
                     viewModel.saveCardio()
                     dismiss()
                 }
+                .buttonStyle(.borderedProminent)
             }
         }.font(.headline)
     }
