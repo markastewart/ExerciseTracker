@@ -22,20 +22,15 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("Lift & Run")
-                        .font(.title)
-                        .padding(.horizontal)
-                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Date Range")
-                            .padding(.horizontal)
+                            .font(.headline)
                         
                         HStack {
                             DatePicker("Start", selection: $startDate, in: ...endDate, displayedComponents: .date)
                             Spacer()
                             DatePicker("End", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
                         }
-                        .padding(.horizontal)
                     }
                     
                         // Cardio Progress Section
@@ -53,10 +48,16 @@ struct DashboardView: View {
                             .padding()
                     }
                 }
+                .padding(.top, -30) // Adjusted for smaller top padding
             }
+            .padding(.horizontal)
             .font(.subheadline)
             .background(Color(.systemGray6))
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Lift & Run")
+                        .font(.title)
+                }
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         Button("Data Sync") {
@@ -64,6 +65,7 @@ struct DashboardView: View {
                         }
                     } label: {
                         Label("Utility", systemImage: "gearshape")
+                            .font(.caption2)
                     }
                 }
             }
