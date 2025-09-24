@@ -35,7 +35,7 @@ struct StrengthProgressView: View {
                 ForEach(exercises) { exercise in
                     let volume = exercise.sets * exercise.reps * exercise.weight
                     BarMark(
-                        x: .value("Date", exercise.timestamp),
+                        x: .value("Date", exercise.exerciseDate),
                         y: .value("Volume", volume)
                     )
                     .foregroundStyle(.orange)

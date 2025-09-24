@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 class CardioEntryViewModel: ObservableObject {
-    @Published var timestamp: Date
+    @Published var exerciseDate: Date
     @Published var exerciseType: String
     @Published var duration: TimeInterval
     @Published var distance: Double
@@ -21,7 +21,7 @@ class CardioEntryViewModel: ObservableObject {
     private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]
     
     init() {
-        self.timestamp = Date()
+        self.exerciseDate = Date()
         self.exerciseType = ""
         self.duration = 0.0
         self.distance = 0.0
@@ -49,7 +49,7 @@ class CardioEntryViewModel: ObservableObject {
         
         let descriptor = FetchDescriptor(
             predicate: predicate,
-            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+            sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)]
         )
         
         do {
@@ -107,7 +107,7 @@ class CardioEntryViewModel: ObservableObject {
     
     func saveCardio() {
         let newCardio = CardioExercise()
-        newCardio.timestamp = timestamp
+        newCardio.exerciseDate = exerciseDate
         newCardio.exerciseType = exerciseType
         newCardio.duration = duration
         newCardio.distance = distance

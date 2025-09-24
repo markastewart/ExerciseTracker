@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 class StrengthEntryViewModel: ObservableObject {
-    @Published var timestamp = Date()
+    @Published var exerciseDate = Date()
     @Published var exerciseType: String
     @Published var sets: Int
     @Published var reps: Int
@@ -34,7 +34,7 @@ class StrengthEntryViewModel: ObservableObject {
                                        ]
     
     init() {
-        self.timestamp = Date()
+        self.exerciseDate = Date()
         self.exerciseType = ""
         self.sets = 3
         self.reps = 12
@@ -60,7 +60,7 @@ class StrengthEntryViewModel: ObservableObject {
         
         let descriptor = FetchDescriptor(
             predicate: predicate,
-            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+            sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)]
         )
         
         do {
@@ -117,7 +117,7 @@ class StrengthEntryViewModel: ObservableObject {
     
     func saveStrength() {
         let newStrength = StrengthExercise()
-        newStrength.timestamp = timestamp
+        newStrength.exerciseDate = exerciseDate
         newStrength.exerciseType = exerciseType
         newStrength.sets = sets
         newStrength.reps = reps

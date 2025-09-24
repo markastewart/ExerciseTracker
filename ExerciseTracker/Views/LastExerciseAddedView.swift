@@ -30,7 +30,7 @@ struct LastExerciseAddedView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text("Date: \(DateFormatter.shortDate.string(from: cardio.timestamp))")
+                            Text("Date: \(DateFormatter.shortDate.string(from: cardio.exerciseDate))")
                         }
                         HStack {
                             Text("Duration: \(Int(cardio.duration)) min")
@@ -47,7 +47,7 @@ struct LastExerciseAddedView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Date: \(DateFormatter.shortDate.string(from: strength.timestamp))")
+                        Text("Date: \(DateFormatter.shortDate.string(from: strength.exerciseDate))")
                         
                         HStack {
                             Text("Sets: \(strength.sets)")

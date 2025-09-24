@@ -20,10 +20,10 @@ enum AnyExercise: Identifiable {
         }
     }
     
-    var timestamp: Date {
+    var exerciseDate: Date {
         switch self {
-            case .cardio(let cardioEnum): return cardioEnum.timestamp
-            case .strength(let strengthEnum): return strengthEnum.timestamp
+            case .cardio(let cardioEnum): return cardioEnum.exerciseDate
+            case .strength(let strengthEnum): return strengthEnum.exerciseDate
         }
     }
 }

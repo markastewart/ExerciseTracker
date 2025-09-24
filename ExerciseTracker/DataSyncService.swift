@@ -24,15 +24,15 @@ class DataSyncService {
         
             // Export Cardio Data
         exportString += "# Cardio Data\n"
-        let cardioHeader = "timestamp,cardio_name,duration,distance,calories,incline\n"
+        let cardioHeader = "exerciseDate,cardio_name,duration,distance,calories,incline\n"
         exportString += cardioHeader
         do {
-            let cardioDescriptor = FetchDescriptor<CardioExercise>(sortBy: [SortDescriptor(\.timestamp)])
+            let cardioDescriptor = FetchDescriptor<CardioExercise>(sortBy: [SortDescriptor(\.exerciseDate)])
             let allCardio = try modelContext.fetch(cardioDescriptor)
             
             for exercise in allCardio {
-                let formattedTimestamp = DateFormatter.shortDate.string(from: exercise.timestamp)
-                let line = "\(formattedTimestamp), \(exercise.exerciseType), \(exercise.duration), \(exercise.distance), \(exercise.calories), \(exercise.incline)\n"
+                let formattedExerciseDate = DateFormatter.shortDate.string(from: exercise.exerciseDate)
+                let line = "\(formattedExerciseDate), \(exercise.exerciseType), \(exercise.duration), \(exercise.distance), \(exercise.calories), \(exercise.incline)\n"
                 exportString += line
             }
         } catch {
@@ -41,15 +41,15 @@ class DataSyncService {
         
             // Export Strength Data
         exportString += "\n# Strength Data\n"
-        let strengthHeader = "timestamp,strength_name,sets,reps,weight\n"
+        let strengthHeader = "exerciseDate,strength_name,sets,reps,weight\n"
         exportString += strengthHeader
         do {
-            let strengthDescriptor = FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.timestamp)])
+            let strengthDescriptor = FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.exerciseDate)])
             let allStrength = try modelContext.fetch(strengthDescriptor)
             
             for exercise in allStrength {
-                let formattedTimestamp = DateFormatter.shortDate.string(from: exercise.timestamp)
-                let line = "\(formattedTimestamp),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight)\n"
+                let formattedExerciseDate = DateFormatter.shortDate.string(from: exercise.exerciseDate)
+                let line = "\(formattedExerciseDate),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight)\n"
                 exportString += line
             }
         } catch {
@@ -82,7 +82,7 @@ class DataSyncService {
                 continue
             }
                 // Skip header lines
-            if line.hasPrefix("cardio_name") || line.hasPrefix("strength_name") || line.hasPrefix("timestamp"){
+            if line.hasPrefix("cardio_name") || line.hasPrefix("strength_name") || line.hasPrefix("exerciseDate"){
                 continue
             }
             
@@ -90,7 +90,7 @@ class DataSyncService {
             
             if isCardioSection && components.count == CardioExercise.columnIndex.allCases.count {
                 let exerciseType = components[CardioExercise.columnIndex.exerciseType]
-                if let timestamp = DateFormatter.shortDate.date(from: components[CardioExercise.columnIndex.timestamp]),
+                if let exerciseDate = DateFormatter.shortDate.date(from: components[CardioExercise.columnIndex.exerciseDate]),
                    !exerciseType.isEmpty,
                    let duration = TimeInterval(components[CardioExercise.columnIndex.duration].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let distance = Double(components[CardioExercise.columnIndex.distance].trimmingCharacters(in: .whitespacesAndNewlines)),
@@ -98,7 +98,7 @@ class DataSyncService {
                    let incline = Double(components[CardioExercise.columnIndex.incline].trimmingCharacters(in: .whitespacesAndNewlines))
                 {
                     let newCardio = CardioExercise()
-                    newCardio.timestamp = timestamp
+                    newCardio.exerciseDate = exerciseDate
                     newCardio.exerciseType = exerciseType
                     newCardio.duration = duration
                     newCardio.distance = distance
@@ -112,14 +112,14 @@ class DataSyncService {
                 }
             } else if isStrengthSection && components.count == StrengthExercise.columnIndex.allCases.count {
                 let exerciseType = components[StrengthExercise.columnIndex.exerciseType]
-                if let timestamp = DateFormatter.shortDate.date(from: components[StrengthExercise.columnIndex.timestamp]),
+                if let exerciseDate = DateFormatter.shortDate.date(from: components[StrengthExercise.columnIndex.exerciseDate]),
                    !exerciseType.isEmpty,
                    let sets = Int(components[StrengthExercise.columnIndex.sets].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let reps = Int(components[StrengthExercise.columnIndex.reps].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let weight = Int(components[StrengthExercise.columnIndex.weight].trimmingCharacters(in: .whitespacesAndNewlines))
                 {
                     let newStrength = StrengthExercise()
-                    newStrength.timestamp = timestamp
+                    newStrength.exerciseDate = exerciseDate
                     newStrength.exerciseType = exerciseType
                     newStrength.sets = sets
                     newStrength.reps = reps

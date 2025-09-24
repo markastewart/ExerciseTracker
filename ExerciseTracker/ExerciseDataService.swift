@@ -50,11 +50,11 @@ class ExerciseDataService {
         let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) ?? date
         
         let cardioPredicate = #Predicate<CardioExercise> { exercise in
-            exercise.timestamp >= startOfDay && exercise.timestamp < endOfDay
+            exercise.exerciseDate >= startOfDay && exercise.exerciseDate < endOfDay
         }
         
         let strengthPredicate = #Predicate<StrengthExercise> { exercise in
-            exercise.timestamp >= startOfDay && exercise.timestamp < endOfDay
+            exercise.exerciseDate >= startOfDay && exercise.exerciseDate < endOfDay
         }
         
         let cardioDescriptor = FetchDescriptor(predicate: cardioPredicate)

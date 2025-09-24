@@ -14,7 +14,7 @@ struct CardioEntryView: View {
     
     var body: some View {
         Form {
-            DatePickerView(initialDate: $viewModel.timestamp)
+            DatePickerView(initialDate: $viewModel.exerciseDate)
             
             Picker("Exercise Type", selection: $viewModel.exerciseType) {
                 ForEach(viewModel.cardioTypes, id: \.self) { type in

@@ -41,10 +41,10 @@ struct DashboardView: View {
                     }
                     
                         // Cardio Progress Section
-                    CardioProgressView(exercises: allCardio.filter { dateRange.contains($0.timestamp) })
+                    CardioProgressView(exercises: allCardio.filter { dateRange.contains($0.exerciseDate) })
                     
                         // Strength Progress Section
-                    StrengthProgressView(exercises: allStrength.filter { dateRange.contains($0.timestamp) })
+                    StrengthProgressView(exercises: allStrength.filter { dateRange.contains($0.exerciseDate) })
                     
                         // Display Last Recorded Exercise if there is one.
                     if let lastExercise = viewModel.lastExercise {

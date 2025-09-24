@@ -36,16 +36,16 @@ final class DashboardViewModel: ObservableObject {
         if let modelContext = dataService.modelContext {
             
             let latestCardio = try? modelContext.fetch (
-                FetchDescriptor<CardioExercise>( sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+                FetchDescriptor<CardioExercise>( sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)])
             ).first
             
             let latestStrength = try? modelContext.fetch(
-                FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+                FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)])
             ).first
             
             switch (latestCardio, latestStrength) {
                 case let (cardio?, strength?):
-                    lastExercise = cardio.timestamp >= strength.timestamp ? .cardio(cardio) : .strength(strength)
+                    lastExercise = cardio.exerciseDate >= strength.exerciseDate ? .cardio(cardio) : .strength(strength)
                 case let (cardio?, nil):
                     lastExercise = .cardio(cardio)
                 case let (nil, strength?):

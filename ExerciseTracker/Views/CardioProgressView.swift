@@ -35,7 +35,7 @@ struct CardioProgressView: View {
                 ForEach(exercises) { exercise in
                     // Calories line
                     LineMark(
-                        x: .value("Date", exercise.timestamp),
+                        x: .value("Date", exercise.exerciseDate),
                         y: .value("Calories", exercise.calories)
                     )
                     .foregroundStyle(by: .value("Metric", "Calories"))
@@ -49,7 +49,7 @@ struct CardioProgressView: View {
                     if exercise.duration > 0 {
                         let pace = exercise.distance / exercise.duration * 60
                         LineMark(
-                            x: .value("Date", exercise.timestamp),
+                            x: .value("Date", exercise.exerciseDate),
                             y: .value("Pace", pace)
                         )
                         .foregroundStyle(by: .value("Metric", "Pace"))

@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class CardioExercise {
-    var timestamp: Date = Date()
+    var exerciseDate: Date = Date()
     var exerciseType: String = ""
     var duration: TimeInterval = 0.0
     var distance: Double = 0.0
@@ -21,7 +21,7 @@ final class CardioExercise {
     }
     
     enum columnIndex: Int, CaseIterable {
-        case timestamp = 0
+        case exerciseDate = 0
         case exerciseType = 1
         case duration = 2
         case distance = 3
