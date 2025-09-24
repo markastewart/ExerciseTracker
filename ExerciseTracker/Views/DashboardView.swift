@@ -24,12 +24,10 @@ struct DashboardView: View {
                 VStack(spacing: 20) {
                     Text("Lift & Run")
                         .font(.title)
-                        .fontWeight(.bold)
                         .padding(.horizontal)
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Date Range")
-                            .font(.headline)
                             .padding(.horizontal)
                         
                         HStack {
@@ -51,12 +49,12 @@ struct DashboardView: View {
                         LastExerciseAddedView(exercise: lastExercise)
                     } else {
                         Text("No exercises recorded yet.")
-                            .font(.subheadline)
                             .foregroundColor(.secondary)
                             .padding()
                     }
                 }
             }
+            .font(.subheadline)
             .background(Color(.systemGray6))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

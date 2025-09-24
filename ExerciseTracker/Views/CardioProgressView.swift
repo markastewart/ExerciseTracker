@@ -21,19 +21,16 @@ struct CardioProgressView: View {
                 
                 NavigationLink(destination: CardioEntryView()) {
                     Image(systemName: "plus.circle.fill")
-                        .font(.title2)
                 }
                 
                 NavigationLink(destination: Text("Cardio Detail View")) {
                     Image(systemName: "list.bullet")
-                        .font(.title2)
                 }
             }
             .padding([.horizontal, .top])
             
             Chart {
                 ForEach(exercises) { exercise in
-                    // Calories line
                     LineMark(
                         x: .value("Date", exercise.exerciseDate),
                         y: .value("Calories", exercise.calories)
@@ -41,8 +38,8 @@ struct CardioProgressView: View {
                     .foregroundStyle(by: .value("Metric", "Calories"))
                 }
             }
-            .frame(height: 100)
             .padding(.horizontal)
+            
             Chart {
                 ForEach(exercises) { exercise in
                         // Make sure duration > 0 to avoid division by zero
@@ -57,12 +54,11 @@ struct CardioProgressView: View {
                 }
             }
             .chartForegroundStyleScale(["Pace": .green])
-            .frame(height: 100)
             .padding(.horizontal)
         }
+        .frame(height: 200)
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .padding(.horizontal)
     }
 }

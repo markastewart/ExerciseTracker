@@ -21,12 +21,10 @@ struct StrengthProgressView: View {
                 
                 NavigationLink(destination: StrengthEntryView()) {
                     Image(systemName: "plus.circle.fill")
-                        .font(.title2)
                 }
                 
                 NavigationLink(destination: Text("Strength Detail View")) {
                     Image(systemName: "list.bullet")
-                        .font(.title2)
                 }
             }
             .padding([.horizontal, .top])
@@ -41,12 +39,11 @@ struct StrengthProgressView: View {
                     .foregroundStyle(.orange)
                 }
             }
-            .frame(height: 200)
+            .frame(height: 125)
             .padding(.horizontal)
         }
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .padding(.horizontal)
     }
 }
