@@ -6,33 +6,59 @@
 //
 
 import Foundation
+import SwiftUI
 import SwiftData
 
-class CardioProgressViewModel: ObservableObject {
-//    @Published var exerciseDate: Date
-//    @Published var exerciseType: String
-//    @Published var duration: TimeInterval
-//    @Published var distance: Double
-//    @Published var calories: Int
-//    @Published var incline: Double
-//    @Published var cardioTypes: [String] = []
-//    @Published var recordedDate: Date
+    /// A struct to hold aggregated cardio data for a single day.
+struct AggregatedCardioData: Identifiable {
+    let id = UUID()
+    let date: Date
+    let totalDistance: Double
+    let totalCalories: Int
+    let averagePace: Double
+}
+
+@Observable class CardioProgressViewModel {
     
-    private let dataService = ExerciseDataService.shared
+        /// The aggregated data, published for the view to observe.
+    var aggregatedData: [AggregatedCardioData] = []
     
-    init() {
-//        self.exerciseDate = Date()
-//        self.exerciseType = ""
-//        self.duration = 0.0
-//        self.distance = 0.0
-//        self.calories = 0
-//        self.incline = 0.0
-//        self.recordedDate = Date()
+    private var exercises: [CardioExercise] = []
+    
+    init(exercises: [CardioExercise]) {
+        self.exercises = exercises
+        self.aggregateData()
+    }
+    
+        /// Public method to update the exercises array and re-aggregate data.
+    func update(exercises: [CardioExercise]) {
+        self.exercises = exercises
+        self.aggregateData()
+    }
+    
+    /// Aggregates raw exercise data into daily totals.
+    func aggregateData() {
+            // Group exercises by day.
+        let groupedByDay = Dictionary(grouping: exercises) { exercise in
+            Calendar.current.startOfDay(for: exercise.exerciseDate)
+        }
         
-            // Init cardioTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
-//        loadSortedCardioTypes()
-//        exerciseType = cardioTypes.first ?? ""
-//        loadLastCardioEntry()
-        print("init called")
+            // Map the grouped data into AggregatedCardioData structs.
+        self.aggregatedData = groupedByDay.map { (date, dailyExercises) in
+            let totalDistance = dailyExercises.reduce(0.0) { $0 + $1.distance }
+            let totalCalories = dailyExercises.reduce(0) { $0 + $1.calories }
+            let totalDuration = dailyExercises.reduce(0.0) { $0 + $1.duration }
+            
+                // Calculate pace, handling potential division by zero
+            let averagePace = totalDuration > 0 ? (totalDistance / totalDuration) * 60 : 0.0
+            
+            return AggregatedCardioData(
+                date: date,
+                totalDistance: totalDistance,
+                totalCalories: totalCalories,
+                averagePace: averagePace
+            )
+        }
+        .sorted { $0.date < $1.date } // Sort by date for proper chart display
     }
 }

@@ -7,9 +7,15 @@
 
 import SwiftUI
 import Charts
+import Foundation
 
 struct CardioProgressView: View {
+    
+        /// The raw exercise data passed from the parent view.
     var exercises: [CardioExercise]
+    
+        /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
+    @State private var viewModel = CardioProgressViewModel(exercises: [])
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -29,36 +35,42 @@ struct CardioProgressView: View {
             }
             .padding([.horizontal, .top])
             
-            Chart {
-                ForEach(exercises) { exercise in
-                    LineMark(
-                        x: .value("Date", exercise.exerciseDate),
-                        y: .value("Calories", exercise.calories)
-                    )
-                    .foregroundStyle(by: .value("Metric", "Calories"))
-                }
-            }
-            .padding(.horizontal)
-            
-            Chart {
-                ForEach(exercises) { exercise in
-                        // Make sure duration > 0 to avoid division by zero
-                    if exercise.duration > 0 {
-                        let pace = exercise.distance / exercise.duration * 60
+            if viewModel.aggregatedData.isEmpty {
+                Text("No data for this date range.")
+                    .padding()
+            } else {
+                Chart {
+                    ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
-                            x: .value("Date", exercise.exerciseDate),
-                            y: .value("Pace", pace)
+                            x: .value("Date", dayData.date),
+                            y: .value("Calories", dayData.totalCalories)
                         )
-                        .foregroundStyle(by: .value("Metric", "Pace"))
+                        .foregroundStyle(by: .value("Metric", "Calories"))
                     }
                 }
+                .padding(.horizontal)
+                
+                Chart {
+                    ForEach(viewModel.aggregatedData) { dayData in
+                        if dayData.averagePace > 0 {
+                            LineMark(
+                                x: .value("Date", dayData.date),
+                                y: .value("Pace", dayData.averagePace)
+                            )
+                            .foregroundStyle(by: .value("Metric", "Pace"))
+                        }
+                    }
+                }
+                .chartForegroundStyleScale(["Pace": .green])
+                .padding(.horizontal)
             }
-            .chartForegroundStyleScale(["Pace": .green])
-            .padding(.horizontal)
         }
         .frame(height: 200)
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
+        .onChange(of: exercises, initial: true) { _, newExercises in
+            viewModel.update(exercises: newExercises)
+        }
     }
 }
