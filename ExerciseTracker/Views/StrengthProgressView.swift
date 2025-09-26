@@ -7,9 +7,15 @@
 
 import SwiftUI
 import Charts
+import Foundation
 
 struct StrengthProgressView: View {
+    
+        /// The raw exercise data passed from the parent view.
     var exercises: [StrengthExercise]
+    
+        /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
+    @State private var viewModel = StrengthProgressViewModel(exercises: [])
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -29,21 +35,28 @@ struct StrengthProgressView: View {
             }
             .padding([.horizontal, .top])
             
-            Chart {
-                ForEach(exercises) { exercise in
-                    let volume = exercise.sets * exercise.reps * exercise.weight
-                    BarMark(
-                        x: .value("Date", exercise.exerciseDate),
-                        y: .value("Volume", volume)
-                    )
-                    .foregroundStyle(.orange)
+            if viewModel.aggregatedData.isEmpty {
+                Text("No data for this date range.")
+                    .padding()
+            } else {
+                Chart {
+                    ForEach(viewModel.aggregatedData) { dayData in
+                        LineMark(
+                            x: .value("Date", dayData.date),
+                            y: .value("Total Weight Lifted (pounds)", dayData.totalWeightLifted)
+                        )
+                        .foregroundStyle(by: .value("Metric", "Total Weight Lifted (pounds)"))
+                    }
                 }
+                .padding(.horizontal)
             }
-            .frame(height: 125)
-            .padding(.horizontal)
         }
+        .frame(height: 200)
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
+        .onChange(of: exercises, initial: true) { _, newExercises in
+            viewModel.update(exercises: newExercises)
+        }
     }
 }
