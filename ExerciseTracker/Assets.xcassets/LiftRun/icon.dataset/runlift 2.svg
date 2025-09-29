@@ -1,0 +1,37 @@
+<!--
+    Lift & Run App Icon Concept (Angular Intersection) - Warm Energy Variation
+    Focuses on structure, peak performance, and sharp, dynamic angles using warm colors.
+-->
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+    <!-- Dark Sapphire Blue Background (#2A4B8D) - Clearly blue, offering strong contrast. -->
+    <rect width="256" height="256" rx="55" fill="#2A4B8D"/>
+    
+    <!-- Define Gradient: Fiery Red to Bright Orange -->
+    <defs>
+        <linearGradient id="AngularGradient" x1="0" y1="200" x2="256" y2="56" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FF4500"/> <!-- Fiery Red -->
+            <stop offset="100%" stop-color="#FFD700"/> <!-- Gold/Bright Yellow -->
+        </linearGradient>
+    </defs>
+    
+    <!-- 1. The 'Lift' Motion (Broad, stable chevron) -->
+    <!-- This shape represents a wide, strong base -->
+    <path d="M50 160 L 128 80 L 206 160" 
+          stroke="url(#AngularGradient)" 
+          stroke-width="30" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <!-- 2. The 'Run' Motion (Sharp, fast peak, layered slightly lower) -->
+    <!-- This shape represents speed and sharp momentum -->
+    <path d="M50 190 L 128 110 L 206 190" 
+          stroke="#FFFFFF" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"
+          opacity="0.9"/>
+          
+</svg>
