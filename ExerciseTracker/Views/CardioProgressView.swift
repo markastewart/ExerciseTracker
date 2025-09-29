@@ -14,8 +14,12 @@ struct CardioProgressView: View {
         /// The raw exercise data passed from the parent view.
     var exercises: [CardioExercise]
     
+        /// The specific date range needed by the view model to pad missing data.
+    var startDate: Date // Required for date padding
+    var endDate: Date   // Required for date padding
+    
         /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
-    @State private var viewModel = CardioProgressViewModel(exercises: [])
+    @State private var viewModel = CardioProgressViewModel(exercises: [], startDate: Date(), endDate: Date())
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -52,13 +56,11 @@ struct CardioProgressView: View {
                 
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
-                        if dayData.averagePace > 0 {
-                            LineMark(
-                                x: .value("Date", dayData.date),
-                                y: .value("Pace", dayData.averagePace)
-                            )
-                            .foregroundStyle(by: .value("Metric", "Pace"))
-                        }
+                        LineMark(
+                            x: .value("Date", dayData.date),
+                            y: .value("Pace", dayData.averagePace)
+                        )
+                        .foregroundStyle(by: .value("Metric", "Pace"))
                     }
                 }
                 .chartForegroundStyleScale(["Pace": .green])
@@ -69,8 +71,14 @@ struct CardioProgressView: View {
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .onChange(of: exercises, initial: true) { _, newExercises in
-            viewModel.update(exercises: newExercises)
+        .onAppear{
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+        }
+        .onChange(of: exercises.count) {
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+        }
+        .onChange(of: [startDate, endDate]) {
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
     }
 }

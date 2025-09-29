@@ -30,19 +30,20 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 15) {
-                        // Range selector replaces two DatePickers
                     DateRangeSelector(startDate: $startDate, endDate: $endDate)
                         .padding(.leading, 7)
                     
-                        // Cardio Progress Section
                     CardioProgressView(
-                        exercises: allCardio.filter { dateRange.contains($0.exerciseDate) }
+                        exercises: allCardio.filter { dateRange.contains($0.exerciseDate) },
+                        startDate: startDate, // Pass for date padding
+                        endDate: endDate      // Pass for date padding
                     )
                     
-                        // Strength Progress Section
-                    StrengthProgressView(
-                        exercises: allStrength.filter { dateRange.contains($0.exerciseDate) }
-                    )
+//                    StrengthProgressView(
+//                        exercises: allStrength.filter { dateRange.contains($0.exerciseDate) },
+//                        startDate: startDate, // Pass for date padding
+//                        endDate: endDate      // Pass for date padding
+//                    )
                     
                         // Last recorded exercise
                     if let lastExercise = viewModel.lastExercise {
