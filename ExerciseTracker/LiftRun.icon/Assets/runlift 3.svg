@@ -1,0 +1,38 @@
+<!--
+    Lift & Run App Icon Concept - Creative Dual Symbols
+    Features a heartbeat line (Cardio) dynamically intersecting with a barbell (Strength).
+-->
+<svg width="750" height="750" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    
+    <!-- Dark Sapphire Blue Background (#2A4B8D) -->
+    <rect width="256" height="256" rx="55" fill="#2A4B8D"/>
+    
+    <!-- Define Gradient for the Barbell (Strength) -->
+    <defs>
+        <linearGradient id="LiftGradient" x1="100" y1="100" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FF4500"/> <!-- Fiery Red -->
+            <stop offset="100%" stop-color="#FFD700"/> <!-- Gold/Bright Yellow -->
+        </linearGradient>
+    </defs>
+    
+    <!-- 1. HEARTBEAT / PULSE LINE (Cardio) - White -->
+    <!-- This path represents a stylized, dynamic EKG or running track profile -->
+    <path d="M40 130 C 60 130, 70 110, 85 110 S 100 180, 115 180 S 135 70, 150 70 S 175 160, 190 160 S 210 130, 225 130" 
+          stroke="#FFFFFF" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"/>
+          
+    <!-- 2. BARBELL (Strength) - Red/Orange Gradient -->
+    
+    <!-- Main Bar -->
+    <line x1="100" y1="130" x2="160" y2="130" stroke="url(#LiftGradient)" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Left Plate -->
+    <rect x="95" y="115" width="10" height="30" rx="3" fill="url(#LiftGradient)"/>
+    
+    <!-- Right Plate -->
+    <rect x="155" y="115" width="10" height="30" rx="3" fill="url(#LiftGradient)"/>
+          
+</svg>
