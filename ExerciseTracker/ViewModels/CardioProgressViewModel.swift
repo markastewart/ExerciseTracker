@@ -30,7 +30,7 @@ struct AggregatedCardioData: Identifiable {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
-        self.aggregateData()
+        aggregateData()
     }
     
         /// Public method to update the exercises array and re-aggregate data.
@@ -38,7 +38,7 @@ struct AggregatedCardioData: Identifiable {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
-        self.aggregateData()
+        aggregateData()
     }
     
         /// Aggregates raw exercise data into daily totals, padding with zero entries for missing days.
@@ -77,11 +77,11 @@ struct AggregatedCardioData: Identifiable {
         }
         
             // Merge the full date range with the actual data, filling in zeros
-        self.aggregatedData = fullDateRange.map { day in
+            aggregatedData = fullDateRange.map { day in
             if let data = actualData[day] {
                 return data
             } else {
-                // Pad with zero data for days without exercises
+                    // Pad with zero data for days without exercises
                 return AggregatedCardioData(
                     date: day,
                     totalDistance: 0.0,

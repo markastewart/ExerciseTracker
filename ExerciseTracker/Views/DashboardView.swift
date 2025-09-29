@@ -19,7 +19,7 @@ struct DashboardView: View {
     @State private var endDate = Date()
     @State private var showDataSyncSheet = false
 
-    // Always-normalized range for filtering
+        // Always-normalized range for filtering
     private var dateRange: ClosedRange<Date> {
         let normalizedStart = Calendar.current.startOfDay(for: startDate)
         let normalizedEnd   = Date()
@@ -39,11 +39,11 @@ struct DashboardView: View {
                         endDate: endDate      // Pass for date padding
                     )
                     
-//                    StrengthProgressView(
-//                        exercises: allStrength.filter { dateRange.contains($0.exerciseDate) },
-//                        startDate: startDate, // Pass for date padding
-//                        endDate: endDate      // Pass for date padding
-//                    )
+                    StrengthProgressView(
+                        exercises: allStrength.filter { dateRange.contains($0.exerciseDate) },
+                        startDate: startDate, // Pass for date padding
+                        endDate: endDate      // Pass for date padding
+                    )
                     
                         // Last recorded exercise
                     if let lastExercise = viewModel.lastExercise {

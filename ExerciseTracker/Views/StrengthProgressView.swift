@@ -14,8 +14,12 @@ struct StrengthProgressView: View {
         /// The raw exercise data passed from the parent view.
     var exercises: [StrengthExercise]
     
+        /// The specific date range needed by the view model to pad missing data.
+    var startDate: Date
+    var endDate: Date
+    
         /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
-    @State private var viewModel = StrengthProgressViewModel(exercises: [])
+    @State private var viewModel = StrengthProgressViewModel(exercises: [], startDate: Date(), endDate: Date())
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -43,9 +47,9 @@ struct StrengthProgressView: View {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
                             x: .value("Date", dayData.date),
-                            y: .value("Total Weight Lifted (pounds)", dayData.totalWeightLifted)
+                            y: .value("Total Weight Lifted", dayData.totalWeightLifted)
                         )
-                        .foregroundStyle(by: .value("Metric", "Total Weight Lifted (pounds)"))
+                        .foregroundStyle(by: .value("Metric", "Total Weight Lifted"))
                     }
                 }
                 .padding(.horizontal)
@@ -55,8 +59,14 @@ struct StrengthProgressView: View {
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .onChange(of: exercises, initial: true) { _, newExercises in
-            viewModel.update(exercises: newExercises)
+        .onAppear {
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+        }
+        .onChange(of: exercises.count) {
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+        }
+        .onChange(of: [startDate, endDate]) {
+            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
     }
 }
