@@ -8,14 +8,14 @@
 import Foundation
 import SwiftData
 
-class StrengthEntryViewModel: ObservableObject {
-    @Published var exerciseDate = Date()
-    @Published var exerciseType: String
-    @Published var sets: Int
-    @Published var reps: Int
-    @Published var weight: Int
-    @Published var strengthTypes: [String] = []
-    @Published var recordedDate = Date()
+@Observable class StrengthEntryViewModel {
+    var exerciseDate = Date()
+    var exerciseType: String
+    var sets: Int
+    var reps: Int
+    var weight: Int
+    var strengthTypes: [String] = []
+    var recordedDate = Date()
     
     private let dataService = ExerciseDataService.shared
     private let defaultStrengthTypes = ["Ab Crunch",

@@ -10,7 +10,7 @@ import SwiftData
 
 struct CardioEntryView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var viewModel = CardioEntryViewModel()
+    @State private var viewModel = CardioEntryViewModel()
     
     var body: some View {
         Form {

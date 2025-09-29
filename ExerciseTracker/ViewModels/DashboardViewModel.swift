@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 import Combine
 
-final class DashboardViewModel: ObservableObject {
-    @Published var lastExercise: AnyExercise?
+@Observable class DashboardViewModel {
+    var lastExercise: AnyExercise?
     
     private let dataService = ExerciseDataService.shared
     private var cancellable: AnyCancellable?

@@ -8,15 +8,15 @@
 import Foundation
 import SwiftData
 
-class CardioEntryViewModel: ObservableObject {
-    @Published var exerciseDate: Date
-    @Published var exerciseType: String
-    @Published var duration: TimeInterval
-    @Published var distance: Double
-    @Published var calories: Int
-    @Published var incline: Double
-    @Published var cardioTypes: [String] = []
-    @Published var recordedDate: Date
+@Observable class CardioEntryViewModel {
+    var exerciseDate: Date
+    var exerciseType: String
+    var duration: TimeInterval
+    var distance: Double
+    var calories: Int
+    var incline: Double
+    var cardioTypes: [String] = []
+    var recordedDate: Date
     
     private let dataService = ExerciseDataService.shared
     private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]

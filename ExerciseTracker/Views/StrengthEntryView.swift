@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StrengthEntryView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var viewModel = StrengthEntryViewModel()
+    @State private var viewModel = StrengthEntryViewModel()
     
     var body: some View {
         Form {

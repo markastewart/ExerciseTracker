@@ -11,7 +11,7 @@ import SwiftData
 import Foundation
 
 struct DashboardView: View {
-    @StateObject private var viewModel = DashboardViewModel()
+    @State private var viewModel = DashboardViewModel()
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
 
