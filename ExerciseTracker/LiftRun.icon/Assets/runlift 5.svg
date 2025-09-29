@@ -4,12 +4,13 @@
 -->
 <svg width="750" height="750" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
     
-    <!-- Dark Sapphire Blue Background (#2A4B8D) -->
-    <rect width="256" height="256" rx="55" fill="#2A4B8D"/>
+    <!-- Lighter Royal Blue Background (#3468B3) -->
+    <rect width="256" height="256" rx="55" fill="#3468B3"/>
     
     <!-- Define Gradient for the Barbell (Strength) -->
     <defs>
-        <linearGradient id="LiftGradient" x1="100" y1="100" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <!-- Updated gradient coordinates to match the new, longer barbell path -->
+        <linearGradient id="LiftGradient" x1="50" y1="210" x2="210" y2="50" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#FF4500"/> <!-- Fiery Red -->
             <stop offset="100%" stop-color="#FFD700"/> <!-- Gold/Bright Yellow -->
         </linearGradient>
@@ -24,15 +25,15 @@
           stroke-linejoin="round"
           fill="none"/>
           
-    <!-- 2. BARBELL (Strength) - Red/Orange Gradient -->
+    <!-- 2. BARBELL (Strength) - Red/Orange Gradient (Angled and Significantly Lengthened) -->
     
-    <!-- Main Bar -->
-    <line x1="100" y1="130" x2="160" y2="130" stroke="url(#LiftGradient)" stroke-width="8" stroke-linecap="round"/>
+    <!-- Main Bar (45 degrees, endpoints near the edge of the viewbox) -->
+    <line x1="50" y1="210" x2="210" y2="50" stroke="url(#LiftGradient)" stroke-width="14" stroke-linecap="round"/>
     
-    <!-- Left Plate -->
-    <rect x="95" y="115" width="10" height="30" rx="3" fill="url(#LiftGradient)"/>
+    <!-- Left Plate (Circle, pushed towards the bottom-left corner) -->
+    <circle cx="50" cy="210" r="18" fill="url(#LiftGradient)"/>
     
-    <!-- Right Plate -->
-    <rect x="155" y="115" width="10" height="30" rx="3" fill="url(#LiftGradient)"/>
+    <!-- Right Plate (Circle, pushed towards the top-right corner) -->
+    <circle cx="210" cy="50" r="18" fill="url(#LiftGradient)"/>
           
 </svg>

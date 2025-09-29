@@ -61,8 +61,14 @@ struct DashboardView: View {
             .background(Color(.systemGray6))
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Lift & Run")
-                        .font(.title)
+                    HStack {
+                        Image("LiftRunCustomIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                        Text("Lift & Run")
+                            .font(.title)
+                    }
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
