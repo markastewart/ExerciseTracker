@@ -39,7 +39,7 @@ struct CardioProgressView: View {
             }
             .padding([.horizontal, .top])
             
-            if viewModel.aggregatedData.isEmpty {
+            if exercises.count == 0 {
                 Text("No data for this date range.")
                     .padding()
             } else {

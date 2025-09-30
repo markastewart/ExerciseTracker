@@ -34,13 +34,13 @@ struct DashboardView: View {
                         .padding(.leading, 7)
                     
                     CardioProgressView(
-                        exercises: allCardio.filter { dateRange.contains($0.exerciseDate) },
+                        exercises: allCardio.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate},
                         startDate: startDate, // Pass for date padding
                         endDate: endDate      // Pass for date padding
                     )
                     
                     StrengthProgressView(
-                        exercises: allStrength.filter { dateRange.contains($0.exerciseDate) },
+                        exercises: allStrength.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate },
                         startDate: startDate, // Pass for date padding
                         endDate: endDate      // Pass for date padding
                     )
