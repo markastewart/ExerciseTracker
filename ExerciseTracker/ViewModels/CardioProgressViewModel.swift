@@ -23,6 +23,7 @@ struct AggregatedCardioData: Identifiable {
     var aggregatedData: [AggregatedCardioData] = []
     
     private var exercises: [CardioExercise] = []
+    var filteredExercises: [CardioExercise] = []
     private var startDate: Date = Date()
     private var endDate: Date = Date()
     
@@ -30,6 +31,7 @@ struct AggregatedCardioData: Identifiable {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
+        filteredExercises = exercises.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate}
         aggregateData()
     }
     
@@ -38,6 +40,7 @@ struct AggregatedCardioData: Identifiable {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
+        filteredExercises = exercises.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate}
         aggregateData()
     }
     

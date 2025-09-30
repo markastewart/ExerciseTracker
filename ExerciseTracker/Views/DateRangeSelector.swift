@@ -21,7 +21,7 @@ struct DateRangeSelector: View {
 
     @Binding var startDate: Date
     @Binding var endDate: Date
-    @State private var choice: RangeChoice = .week   // default
+    @Binding var choice: RangeChoice
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -56,6 +56,23 @@ struct DateRangeSelector: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .onAppear {
+            if choice != .custom {
+                setDates(for: choice)
+            }
+        }
+            // Handle manual selection change (e.g., user switches from .month to .week0
+        .onChange(of: choice) { _, newRange in
+            if newRange != .custom {
+                setDates(for: newRange)
+            }
+        }
+            // Handle external updates (e.g., new exercise added). This causes the dates to "refresh" to the current time if a relative range is selected. By watching Date(), ensure the relative range (like "Last 7 Days") is always pinned to now.
+        .onChange(of: Date()) {
+            if choice != .custom {
+                setDates(for: choice)
+            }
+        }
     }
 
     private func setDates(for range: RangeChoice) {

@@ -24,7 +24,7 @@ struct StrengthProgressView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Strength Progress (\(exercises.count) entries)")
+                Text("Strength Progress (\(viewModel.filteredExercises.count) entries)")
                     .font(.headline)
                 
                 Spacer()

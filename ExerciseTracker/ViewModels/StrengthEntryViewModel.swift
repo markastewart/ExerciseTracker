@@ -27,7 +27,7 @@ import SwiftData
         self.editingExercise = editingExercise
         
         if let exercise = editingExercise {
-                // Case 1: Editing an existing entry
+                // Editing an existing entry
             self.exerciseDate = exercise.exerciseDate
             self.exerciseType = exercise.exerciseType
             self.sets = exercise.sets
@@ -35,13 +35,14 @@ import SwiftData
             self.weight = exercise.weight
             self.recordedDate = exercise.recordedDate
         } else {
-                // Case 2: New entry
+                // New entry
             self.exerciseDate = Date()
             self.exerciseType = ""
             self.sets = 0
             self.reps = 0
             self.weight = 0
             self.recordedDate = Date()
+            setDefaultValues()
         }
         
         loadSortedStrengthTypes()
@@ -53,8 +54,8 @@ import SwiftData
     }
     
     private func setDefaultValues() {
-        sets = 0
-        reps = 0
+        sets = 3
+        reps = 12
         weight = 0
     }
     

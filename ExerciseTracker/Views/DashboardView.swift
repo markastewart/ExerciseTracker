@@ -18,32 +18,18 @@ struct DashboardView: View {
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
     @State private var endDate = Date()
     @State private var showDataSyncSheet = false
-
-        // Always-normalized range for filtering
-    private var dateRange: ClosedRange<Date> {
-        let normalizedStart = Calendar.current.startOfDay(for: startDate)
-        let normalizedEnd   = Date()
-        return normalizedStart...normalizedEnd
-    }
+    @State private var rangeChoice: DateRangeSelector.RangeChoice = .week
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 15) {
-                    DateRangeSelector(startDate: $startDate, endDate: $endDate)
+                    DateRangeSelector(startDate: $startDate, endDate: $endDate, choice: $rangeChoice)
                         .padding(.leading, 7)
                     
-                    CardioProgressView(
-                        exercises: allCardio.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate},
-                        startDate: startDate, // Pass for date padding
-                        endDate: endDate      // Pass for date padding
-                    )
+                    CardioProgressView(exercises: allCardio, startDate: startDate, endDate: endDate)
                     
-                    StrengthProgressView(
-                        exercises: allStrength.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate },
-                        startDate: startDate, // Pass for date padding
-                        endDate: endDate      // Pass for date padding
-                    )
+                    StrengthProgressView(exercises: allStrength, startDate: startDate, endDate: endDate)
                     
                         // Last recorded exercise
                     if let lastExercise = viewModel.lastExercise {
