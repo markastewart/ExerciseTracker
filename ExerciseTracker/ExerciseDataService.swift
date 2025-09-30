@@ -97,4 +97,13 @@ class ExerciseDataService {
             return nil
         }
     }
+    
+    func delete<T: PersistentModel>(_ model: T) {
+        do {
+            modelContext?.delete(model)
+            try modelContext?.save() // Not strictly needed, but common practice
+        } catch {
+            print("Error deleting model: \(error)")
+        }
+    }
 }

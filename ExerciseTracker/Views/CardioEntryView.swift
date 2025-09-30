@@ -6,11 +6,22 @@
 //
 
 import SwiftUI
-import SwiftData
+
+    // MARK: - Cardio Entry View
 
 struct CardioEntryView: View {
     @Environment(\.dismiss) var dismiss
-    @State private var viewModel = CardioEntryViewModel()
+    @State private var viewModel: CardioEntryViewModel
+    @State private var showingDeleteAlert = false
+    
+        // Custom initializer to accept the exercise model for editing or nil for a new entry
+    init(editingExercise: CardioExercise? = nil) {
+        _viewModel = State(initialValue: CardioEntryViewModel(editingExercise: editingExercise))
+    }
+    
+    private var isEditing: Bool {
+        viewModel.editingExercise != nil
+    }
     
     var body: some View {
         Form {
@@ -19,6 +30,12 @@ struct CardioEntryView: View {
             Picker("Exercise Type", selection: $viewModel.exerciseType) {
                 ForEach(viewModel.cardioTypes, id: \.self) { type in
                     Text(type)
+                }
+            }
+                // Only load last entry data when the user changes the type IF they are creating a new entry
+            .onChange(of: viewModel.exerciseType) {
+                if !isEditing {
+                    viewModel.loadLastCardioEntry()
                 }
             }
             
@@ -36,27 +53,22 @@ struct CardioEntryView: View {
                         .keyboardType(.decimalPad)
                 }
                 HStack {
-                    Text("Calories") // Updated from Calories Burned
+                    Text("Calories")
                     Spacer()
                     TextField("0", value: $viewModel.calories, formatter: NumberFormatter())
                         .keyboardType(.decimalPad)
                 }
                 HStack {
-                    Text("Incline (%)") // New field
+                    Text("Incline (%)")
                     Spacer()
                     TextField("0", value: $viewModel.incline, formatter: NumberFormatter.decimal(1))
                         .keyboardType(.decimalPad)
                 }
             }
         }
-        .navigationTitle("Add Cardio Exercise")
+            // Update navigation title based on editing state
+        .navigationTitle(isEditing ? "Edit Cardio Entry" : "Add Cardio Exercise")
         .navigationBarBackButtonHidden()
-        .onAppear {
-            viewModel.loadSortedCardioTypes()
-        }
-        .onChange(of: viewModel.exerciseType) {
-            viewModel.loadLastCardioEntry()
-        }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -67,12 +79,34 @@ struct CardioEntryView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    viewModel.saveCardio()
+                        // Call the unified save/update function
+                    viewModel.saveOrUpdateCardio()
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
             }
-        }.font(.headline)
+                // Show delete button only when editing
+            if isEditing {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+        }
+        .alert("Delete Entry", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteCardio()
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to permanently delete this strength entry?")
+        }
+        .font(.headline)
     }
 }
 

@@ -8,54 +8,59 @@
 import Foundation
 import SwiftData
 
+    // MARK: - StrengthEntryViewModel (Matching the editing pattern)
+
 @Observable class StrengthEntryViewModel {
-    var exerciseDate = Date()
+    var exerciseDate: Date
     var exerciseType: String
     var sets: Int
     var reps: Int
     var weight: Int
     var strengthTypes: [String] = []
-    var recordedDate = Date()
+    var recordedDate: Date
+    var editingExercise: StrengthExercise?      // Reference to the existing model if in edit mode
     
     private let dataService = ExerciseDataService.shared
-    private let defaultStrengthTypes = ["Ab Crunch",
-                                        "Back Extension",
-                                        "Bicep Curl",
-                                        "Chest Press",
-                                        "Inward Thigh",
-                                        "Lateral Pull",
-                                        "Lateral Raise",
-                                        "Leg Curl",
-                                        "Leg Extensions",
-                                        "Rear Delt",
-                                        "Seated Calf Raise",
-                                        "Seated Row",
-                                        "Shoulder Press",
-                                        "Tricep Extension",
-                                       ]
+    private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Lateral Pull", "Leg Curl", "Leg Extensions", "Seated Row", "Shoulder Press"]
     
-    init() {
-        self.exerciseDate = Date()
-        self.exerciseType = ""
-        self.sets = 3
-        self.reps = 12
-        self.weight = 0
-        self.recordedDate = Date()
+    init(editingExercise: StrengthExercise? = nil) {
+        self.editingExercise = editingExercise
         
-        // Init strengthTypes based on previously stored results, set exerciseType to align with most frequently recorded result and fetch its values
+        if let exercise = editingExercise {
+                // Case 1: Editing an existing entry
+            self.exerciseDate = exercise.exerciseDate
+            self.exerciseType = exercise.exerciseType
+            self.sets = exercise.sets
+            self.reps = exercise.reps
+            self.weight = exercise.weight
+            self.recordedDate = exercise.recordedDate
+        } else {
+                // Case 2: New entry
+            self.exerciseDate = Date()
+            self.exerciseType = ""
+            self.sets = 0
+            self.reps = 0
+            self.weight = 0
+            self.recordedDate = Date()
+        }
+        
         loadSortedStrengthTypes()
-        exerciseType = strengthTypes.first ?? ""
-        loadLastStrengthEntry()
+        
+        if editingExercise == nil {
+            exerciseType = strengthTypes.first ?? ""
+            loadLastStrengthEntry()
+        }
     }
     
     private func setDefaultValues() {
-        sets = 3
-        reps = 12
+        sets = 0
+        reps = 0
         weight = 0
     }
     
-        // A function to fetch the most recent entry for a given exercise type
     func loadLastStrengthEntry() {
+        guard editingExercise == nil else { return }
+        
         let predicate = #Predicate<StrengthExercise> { exercise in
             exercise.exerciseType == exerciseType
         }
@@ -66,14 +71,13 @@ import SwiftData
         )
         
         do {
-                // If an exercise entry is found, set the view model's properties with the results of the last exercise
             if let modelContext = dataService.modelContext {
                 if let entry = try? modelContext.fetch(descriptor).first {
                     sets = entry.sets
                     reps = entry.reps
                     weight = entry.weight
                 }
-                else {      // No exercise records of this type exist; use default values
+                else {
                     setDefaultValues()
                 }
             }
@@ -83,48 +87,66 @@ import SwiftData
         }
     }
     
-        // Fetch and sort the exercise types
     func loadSortedStrengthTypes() {
         guard let allExercises = dataService.fetchAllStrengthExercises() else {
+            if exerciseType.isEmpty {
+                exerciseType = defaultStrengthTypes.first ?? ""
+            }
             strengthTypes = defaultStrengthTypes
-            exerciseType = defaultStrengthTypes.first ?? ""
             return
         }
-            // Count the frequency of each exercise type
+        
         var counts: [String: Int] = [:]
         for exercise in allExercises {
             counts[exercise.exerciseType, default: 0] += 1
         }
-            // Get a combined set of all recorded types and default types.
+        
         let recordedTypes = Set(counts.keys)
         let allUniqueTypes = recordedTypes.union(defaultStrengthTypes)
         
-            // Sort the combined list using your criteria.
         let sortedTypes = allUniqueTypes.sorted { (type1, type2) -> Bool in
             let count1 = counts[type1] ?? 0
             let count2 = counts[type2] ?? 0
             
-                // Primary sort: by count (descending)
             if count1 != count2 {
                 return count1 > count2
             } else {
-                // Secondary sort: alphabetical (ascending) for ties
                 return type1 < type2
             }
         }
-            // Update the @Published property
+        
         strengthTypes = sortedTypes
     }
     
+        // Unified save and update function
+    func saveOrUpdateStrength() {
+        let exerciseToSave: StrengthExercise
+        
+        if let existing = editingExercise {     // Update existing entry
+            exerciseToSave = existing
+        } else {
+                // Create a new entry
+            exerciseToSave = StrengthExercise()
+            exerciseToSave.recordedDate = Date()
+        }
+        
+        exerciseToSave.exerciseDate = exerciseDate
+        exerciseToSave.exerciseType = exerciseType
+        exerciseToSave.sets = sets
+        exerciseToSave.reps = reps
+        exerciseToSave.weight = weight
+        
+        if editingExercise == nil {
+            dataService.save(exerciseToSave)
+        }
+    }
     
-    func saveStrength() {
-        let newStrength = StrengthExercise()
-        newStrength.exerciseDate = exerciseDate
-        newStrength.exerciseType = exerciseType
-        newStrength.sets = sets
-        newStrength.reps = reps
-        newStrength.weight = weight
-        newStrength.recordedDate = recordedDate
-        dataService.save(newStrength)
+        /// Deletes the currently editing exercise from SwiftData.
+    func deleteStrength() {
+        guard let exerciseToDelete = editingExercise else {
+            print("Error: Attempted to delete a strength exercise when editingExercise is nil.")
+            return
+        }
+        dataService.delete(exerciseToDelete)
     }
 }

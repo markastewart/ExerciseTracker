@@ -9,7 +9,16 @@ import SwiftUI
 
 struct StrengthEntryView: View {
     @Environment(\.dismiss) var dismiss
-    @State private var viewModel = StrengthEntryViewModel()
+    @State private var viewModel: StrengthEntryViewModel
+    @State private var showingDeleteAlert = false
+    
+    init(editingExercise: StrengthExercise? = nil) {
+        _viewModel = State(initialValue: StrengthEntryViewModel(editingExercise: editingExercise))
+    }
+    
+    private var isEditing: Bool {
+        viewModel.editingExercise != nil
+    }
     
     var body: some View {
         Form {
@@ -18,6 +27,11 @@ struct StrengthEntryView: View {
             Picker("Exercise Type", selection: $viewModel.exerciseType) {
                 ForEach(viewModel.strengthTypes, id: \.self) { type in
                     Text(type)
+                }
+            }
+            .onChange(of: viewModel.exerciseType) {
+                if !isEditing {
+                    viewModel.loadLastStrengthEntry()
                 }
             }
             
@@ -42,14 +56,8 @@ struct StrengthEntryView: View {
                 }
             }
         }
-        .navigationTitle("Add Strength Exercise")
+        .navigationTitle(isEditing ? "Edit Strength Entry" : "Add Strength Exercise")
         .navigationBarBackButtonHidden()
-        .onAppear {
-            viewModel.loadSortedStrengthTypes()
-        }
-        .onChange(of: viewModel.exerciseType) {
-            viewModel.loadLastStrengthEntry()
-        }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -60,12 +68,33 @@ struct StrengthEntryView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    viewModel.saveStrength()
+                    viewModel.saveOrUpdateStrength()
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
             }
-        }.font(.headline)
+                // Show delete button only when editing
+            if isEditing {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+        }
+        .alert("Delete Entry", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteStrength()
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to permanently delete this strength entry?")
+        }
+        .font(.headline)
     }
 }
 
