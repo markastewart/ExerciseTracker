@@ -3,10 +3,11 @@
 //  ExerciseTracker
 //
 //  Created by Mark A Stewart on 9/24/25.
-//
 
 import Foundation
 import SwiftData
+
+    // MARK: - CardioProgressViewModel
 
     /// A struct to hold aggregated cardio data for a single day.
 struct AggregatedCardioData: Identifiable {

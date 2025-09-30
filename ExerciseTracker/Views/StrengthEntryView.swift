@@ -3,7 +3,6 @@
 //  ExerciseTracker
 //
 //  Created by Mark A Stewart on 9/6/25.
-//
 
 import SwiftUI
 

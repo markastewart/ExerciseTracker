@@ -3,7 +3,6 @@
 //  ExerciseTracker
 //
 //  Created by Mark A Stewart on 9/17/25.
-//
 
 import Foundation
 import SwiftData
