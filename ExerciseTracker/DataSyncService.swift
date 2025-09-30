@@ -24,7 +24,7 @@ class DataSyncService {
         
             // Export Cardio Data
         exportString += "# Cardio Data\n"
-        let cardioHeader = "exerciseDate,cardio_name,duration,distance,calories,incline\n"
+        let cardioHeader = "exerciseDate,cardio_name,duration,distance,calories,incline,recordedDate\n"
         exportString += cardioHeader
         do {
             let cardioDescriptor = FetchDescriptor<CardioExercise>(sortBy: [SortDescriptor(\.exerciseDate)])
@@ -32,7 +32,8 @@ class DataSyncService {
             
             for exercise in allCardio {
                 let formattedExerciseDate = DateFormatter.shortDate.string(from: exercise.exerciseDate)
-                let line = "\(formattedExerciseDate), \(exercise.exerciseType), \(exercise.duration), \(exercise.distance), \(exercise.calories), \(exercise.incline)\n"
+                let formattedRecordedDate = DateFormatter.shortDate.string(from: exercise.recordedDate)
+                let line = "\(formattedExerciseDate), \(exercise.exerciseType), \(exercise.duration), \(exercise.distance), \(exercise.calories), \(exercise.incline), \(formattedRecordedDate)\n"
                 exportString += line
             }
         } catch {
@@ -41,7 +42,7 @@ class DataSyncService {
         
             // Export Strength Data
         exportString += "\n# Strength Data\n"
-        let strengthHeader = "exerciseDate,strength_name,sets,reps,weight\n"
+        let strengthHeader = "exerciseDate,strength_name,sets,reps,weight,recordedDate\n"
         exportString += strengthHeader
         do {
             let strengthDescriptor = FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.exerciseDate)])
@@ -49,7 +50,7 @@ class DataSyncService {
             
             for exercise in allStrength {
                 let formattedExerciseDate = DateFormatter.shortDate.string(from: exercise.exerciseDate)
-                let line = "\(formattedExerciseDate),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight)\n"
+                let line = "\(formattedExerciseDate),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight), \(exercise.recordedDate)\n"
                 exportString += line
             }
         } catch {
