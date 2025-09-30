@@ -90,7 +90,7 @@ class DataSyncService {
             let components = line.components(separatedBy: ",")
             
             if isCardioSection && components.count == CardioExercise.columnIndex.allCases.count {
-                let exerciseType = components[CardioExercise.columnIndex.exerciseType]
+                let exerciseType = components[CardioExercise.columnIndex.exerciseType].trimmingCharacters(in: .whitespacesAndNewlines)
                 if let exerciseDate = DateFormatter.shortDate.date(from: components[CardioExercise.columnIndex.exerciseDate]),
                    !exerciseType.isEmpty,
                    let duration = TimeInterval(components[CardioExercise.columnIndex.duration].trimmingCharacters(in: .whitespacesAndNewlines)),
@@ -114,7 +114,7 @@ class DataSyncService {
                     isParseError = true
                 }
             } else if isStrengthSection && components.count == StrengthExercise.columnIndex.allCases.count {
-                let exerciseType = components[StrengthExercise.columnIndex.exerciseType]
+                let exerciseType = components[StrengthExercise.columnIndex.exerciseType].trimmingCharacters(in: .whitespacesAndNewlines)
                 if let exerciseDate = DateFormatter.shortDate.date(from: components[StrengthExercise.columnIndex.exerciseDate]),
                    !exerciseType.isEmpty,
                    let sets = Int(components[StrengthExercise.columnIndex.sets].trimmingCharacters(in: .whitespacesAndNewlines)),
