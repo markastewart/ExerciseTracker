@@ -61,13 +61,13 @@ struct DateRangeSelector: View {
                 setDates(for: choice)
             }
         }
-            // Handle manual selection change (e.g., user switches from .month to .week0
+            // Handle manual selection change (e.g., user switches from .month to .week
         .onChange(of: choice) { _, newRange in
             if newRange != .custom {
                 setDates(for: newRange)
             }
         }
-            // Handle external updates (e.g., new exercise added). This causes the dates to "refresh" to the current time if a relative range is selected. By watching Date(), ensure the relative range (like "Last 7 Days") is always pinned to now.
+            // Handle external updates (e.g., new exercise). Dates are "refreshed" to the current time if a relative range is selected. By watching Date(), ensure range (like "Last 7 Days") is always pinned to now.
         .onChange(of: Date()) {
             if choice != .custom {
                 setDates(for: choice)
