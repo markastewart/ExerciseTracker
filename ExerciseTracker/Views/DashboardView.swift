@@ -11,7 +11,6 @@ import SwiftData
 import Foundation
 
 struct DashboardView: View {
-    @State private var viewModel = DashboardViewModel()
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
 
@@ -31,14 +30,7 @@ struct DashboardView: View {
                     
                     StrengthProgressView(exercises: allStrength, startDate: startDate, endDate: endDate)
                     
-                        // Last recorded exercise
-                    if let lastExercise = viewModel.lastExercise {
-                        LastExerciseAddedView(exercise: lastExercise)
-                    } else {
-                        Text("No exercises recorded yet.")
-                            .foregroundColor(.secondary)
-                            .padding()
-                    }
+                    LastExerciseAddedView()
                 }
                 .padding(.top, -10)
             }
@@ -64,9 +56,6 @@ struct DashboardView: View {
                             .font(.caption2)
                     }
                 }
-            }
-            .onChange(of: allCardio.count + allStrength.count) {
-                viewModel.refreshLastExercise()
             }
             .sheet(isPresented: $showDataSyncSheet) {
                 DataSyncView()

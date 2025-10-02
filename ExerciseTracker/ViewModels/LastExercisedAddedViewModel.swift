@@ -1,36 +1,22 @@
 //
-//  DashboardViewModel.swift
+//  LastExercisedAddedViewModel.swift
 //  ExerciseTracker
 //
-//  Created by Mark A Stewart on 9/20/25.
+//  Created by Mark A Stewart on 10/2/25.
 //
 
 import Foundation
 import SwiftData
 import Combine
 
-@Observable class DashboardViewModel {
-    var lastExercise: AnyExercise?
-    
+@Observable class LastExerciseAddedViewModel {
+    var lastExercise: AnyExercise? = nil
     private let dataService = ExerciseDataService.shared
-    private var cancellable: AnyCancellable?
 
-    // MARK: - Init
     init() {
-            // Listen for any changes in the context (insert/update/delete)
-        if let modelContext = dataService.modelContext {
-            cancellable = NotificationCenter.default
-                .publisher(for: .NSManagedObjectContextObjectsDidChange, object: modelContext)
-                .receive(on: RunLoop.main)
-                .sink { [weak self] _ in
-                    self?.refreshLastExercise()
-                }
-        }
-            // Initial fetch
         refreshLastExercise()
     }
 
-    // MARK: - Helpers
     func refreshLastExercise() {
             // Fetch newest Cardio
         if let modelContext = dataService.modelContext {

@@ -12,18 +12,21 @@ import SwiftData
 enum AnyExercise: Identifiable {
     case cardio(CardioExercise)
     case strength(StrengthExercise)
+    case none           // 'no data' state
     
-    var id: PersistentIdentifier {
+    var id: PersistentIdentifier? {
         switch self {
             case .cardio(let cardioEnum): return cardioEnum.persistentModelID
             case .strength(let strengthEnum): return strengthEnum.persistentModelID
+            case .none: return nil
         }
     }
     
-    var exerciseDate: Date {
+    var exerciseDate: Date? {
         switch self {
             case .cardio(let cardioEnum): return cardioEnum.exerciseDate
             case .strength(let strengthEnum): return strengthEnum.exerciseDate
+            case .none: return nil
         }
     }
 }

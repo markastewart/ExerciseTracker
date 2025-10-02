@@ -8,30 +8,30 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - Last Entry View
-
 struct LastExerciseAddedView: View {
-        // This view takes single, non-optional enum. Parent view responsible for ensuring data exists.
-    var exercise: AnyExercise
+    @State private var viewModel = LastExerciseAddedViewModel()
+    
+        // @Query properties trigger the refresh when data changes
+    @Query private var allStrength: [StrengthExercise]
+    @Query private var allCardio: [CardioExercise]
     
     var body: some View {
-            // Wrap the entire displayed content in a NavigationLink to enable editing
-        NavigationLink(destination: destinationView) {
-            VStack(alignment: .leading, spacing: 5) {
-                    // Use a switch statement on the enum to display the correct data.
-                switch exercise {
-                    case .cardio(let cardio):
-                        VStack {
+        Group {
+            switch viewModel.lastExercise {
+                case .cardio(let cardio):
+                    NavigationLink(destination: destinationView) {
+                        VStack(alignment: .leading, spacing: 5) {
                             HStack {
                                 Text("Last Recorded Exercise (\(DateFormatter.shortDate.string(from: cardio.exerciseDate)))")
                                     .font(.headline)
                                 Spacer()
-                                    // Added edit icon to indicate it's tappable
+                                    // Edit icon to indicate it's tappable
                                 Image(systemName: "pencil.circle.fill")
                                     .foregroundColor(.blue)
                             }
                             .padding(.bottom, 4)
-                            VStack {
+                            
+                            VStack(alignment: .leading) {
                                 HStack {
                                     Text("Exercise: \(cardio.exerciseType)")
                                     Spacer()
@@ -51,19 +51,23 @@ struct LastExerciseAddedView: View {
                             }
                             .padding(.leading, 5)
                         }
-                    case .strength(let strength):
-                        VStack {
+                        .buttonStyle(PlainButtonStyle())
+                        .foregroundColor(.primary)
+                    }
+                    
+                case .strength(let strength):
+                    NavigationLink(destination: destinationView) {
+                        VStack(alignment: .leading, spacing: 5) {
                             HStack {
                                 Text("Last Recorded Exercise - \(DateFormatter.shortDate.string(from: strength.exerciseDate))")
                                     .font(.headline)
                                 Spacer()
-                                    // Added edit icon to indicate it's tappable
                                 Image(systemName: "pencil.circle.fill")
                                     .foregroundColor(.blue)
                             }
                             .padding(.bottom, 4)
                             
-                            VStack {
+                            VStack(alignment: .leading) {
                                 HStack {
                                     Text("Exercise: \(strength.exerciseType)")
                                     Spacer()
@@ -78,29 +82,37 @@ struct LastExerciseAddedView: View {
                             }
                             .padding(.leading, 5)
                         }
-                }
+                        .buttonStyle(PlainButtonStyle())
+                        .foregroundColor(.primary)
+                    }
+                    
+                default: // No data case
+                    Text("No exercises recorded yet. Tap '+' to begin!")
             }
-            .buttonStyle(PlainButtonStyle())
-            .foregroundColor(.primary) // Ensure text color is preserved
         }
         .padding(.vertical)
-        .padding(.leading, 5)
-        .padding(.trailing, 10)
+        .padding(.horizontal, 15) // Use consistent horizontal padding
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
+        .onChange(of: allCardio.count + allStrength.count) {
+            viewModel.refreshLastExercise()
+        }
     }
     
         /// Helper property to determine the correct destination view and pass the model for editing.
     @ViewBuilder
     private var destinationView: some View {
-        switch exercise {
+        switch viewModel.lastExercise {
             case .cardio(let cardio):
                     // Pass existing CardioExercise model for editing
                 CardioEntryView(editingExercise: cardio)
             case .strength(let strength):
-                    // Pass the existing StrengthExercise model for editing
+                    // Pass existing StrengthExercise model for editing
                 StrengthEntryView(editingExercise: strength)
+            default:
+                    // This case ideally never reached if the view is being tapped,
+                Text("No exercise data to edit.")
         }
     }
 }
