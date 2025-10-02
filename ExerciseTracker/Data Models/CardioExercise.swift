@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class CardioExercise {
+final class CardioExercise : Exercise {
     var exerciseDate: Date = Date.now
     var exerciseType: String = ""
     var duration: TimeInterval = 0.0

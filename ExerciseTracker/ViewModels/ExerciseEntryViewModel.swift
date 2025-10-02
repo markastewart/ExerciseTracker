@@ -1,0 +1,216 @@
+//
+//  ExerciseEntryViewModel.swift
+//  ExerciseTracker
+//
+//  Created by Mark A Stewart on 10/2/25.
+//
+
+import Foundation
+import SwiftData
+
+@Observable class ExerciseEntryViewModel {
+    
+        // MARK: - Exercise Type Definition
+    enum ExerciseType: String, CaseIterable {
+        case cardio = "Cardio"
+        case strength = "Strength"
+    }
+    
+        // MARK: - Core Properties (Unified)
+    var mode: ExerciseType = .cardio
+    var exerciseDate: Date = Date()
+    var exerciseType: String = "" // e.g., "Treadmill" or "Bicep Curl"
+    var recordedDate: Date = Date()
+    
+        // MARK: - Cardio Properties
+    var duration: TimeInterval = 0.0
+    var distance: Double = 0.0
+    var calories: Int = 0
+    var incline: Double = 0.0
+    
+        // MARK: - Strength Properties
+    var sets: Int = 3
+    var reps: Int = 12
+    var weight: Int = 0
+    
+        // MARK: - Data and State
+    var allTypes: [String] = [] // Contains either cardioTypes or strengthTypes based on 'mode'
+    var editingCardio: CardioExercise?
+    var editingStrength: StrengthExercise?
+    
+    var isEditing: Bool { editingCardio != nil || editingStrength != nil }
+    
+    private let dataService = ExerciseDataService.shared
+    private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]
+    private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Lateral Pull", "Leg Curl", "Leg Extensions", "Seated Row", "Shoulder Press"]
+    
+        /// Initializes the ViewModel for a new entry or editing an existing one.
+    init(editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
+        self.editingCardio = editingCardio
+        self.editingStrength = editingStrength
+        
+        if let exercise = editingCardio {
+            self.mode = .cardio
+            self.exerciseDate = exercise.exerciseDate
+            self.exerciseType = exercise.exerciseType
+            self.duration = exercise.duration
+            self.distance = exercise.distance
+            self.calories = exercise.calories
+            self.incline = exercise.incline
+            self.recordedDate = exercise.recordedDate
+        } else if let exercise = editingStrength {
+            self.mode = .strength
+            self.exerciseDate = exercise.exerciseDate
+            self.exerciseType = exercise.exerciseType
+            self.sets = exercise.sets
+            self.reps = exercise.reps
+            self.weight = exercise.weight
+            self.recordedDate = exercise.recordedDate
+        } else {
+                // New entry, default to Cardio
+            self.mode = .cardio
+        }
+        
+        loadSortedTypes()
+        
+            // For new entries, set default type and load last values
+        if !isEditing {
+                // Set the initial type to the most frequent one
+            exerciseType = allTypes.first ?? ""
+            loadLastEntry()
+        }
+    }
+    
+        // MARK: - Public Actions
+    
+        /// Called when the user switches the Exercise Type picker.
+    func handleModeChange() {
+            // Recalculate the available exercise types for the new mode
+        loadSortedTypes()
+        
+            // Set the exerciseType to the new default (most frequent/first alphabetical)
+        exerciseType = allTypes.first ?? ""
+        
+            // Load the last entered values for the newly selected type
+        loadLastEntry()
+    }
+    
+        /// Loads the values from the most recent entry matching the current mode and exerciseType.
+    func loadLastEntry() {
+        guard !isEditing else { return } // Only load defaults for new entries
+        
+        switch mode {
+            case .cardio:
+                    // Define predicate and descriptor for Cardio
+                let predicate = #Predicate<CardioExercise> { $0.exerciseType == exerciseType }
+                let descriptor = FetchDescriptor(predicate: predicate, sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)])
+                
+                if let entry = dataService.fetchLast(descriptor: descriptor) {
+                    duration = entry.duration
+                    distance = entry.distance
+                    calories = entry.calories
+                    incline = entry.incline
+                } else {
+                        // If no entry found, set default Cardio values
+                    duration = 0.0
+                    distance = 0.0
+                    calories = 0
+                    incline = 0.0
+                }
+                
+            case .strength:
+                    // Define predicate and descriptor for Strength
+                let predicate = #Predicate<StrengthExercise> { $0.exerciseType == exerciseType }
+                let descriptor = FetchDescriptor(predicate: predicate, sortBy: [SortDescriptor(\.exerciseDate, order: .reverse)])
+                
+                if let entry = dataService.fetchLast(descriptor: descriptor) {
+                    sets = entry.sets
+                    reps = entry.reps
+                    weight = entry.weight
+                } else {
+                        // If no entry found, set default Strength values
+                    sets = 3
+                    reps = 12
+                    weight = 0
+                }
+        }
+    }
+    
+        /// Unified save and update function.
+    func saveOrUpdateExercise() {
+        switch mode {
+            case .cardio:
+                let exerciseToSave = editingCardio ?? CardioExercise()
+                exerciseToSave.exerciseDate = exerciseDate
+                exerciseToSave.exerciseType = exerciseType
+                exerciseToSave.duration = duration
+                exerciseToSave.distance = distance
+                exerciseToSave.calories = calories
+                exerciseToSave.incline = incline
+                
+                if editingCardio == nil {
+                    exerciseToSave.recordedDate = Date()
+                    dataService.save(exerciseToSave)
+                }
+                
+            case .strength:
+                let exerciseToSave = editingStrength ?? StrengthExercise()
+                exerciseToSave.exerciseDate = exerciseDate
+                exerciseToSave.exerciseType = exerciseType
+                exerciseToSave.sets = sets
+                exerciseToSave.reps = reps
+                exerciseToSave.weight = weight
+                
+                if editingStrength == nil {
+                    exerciseToSave.recordedDate = Date()
+                    dataService.save(exerciseToSave)
+                }
+        }
+    }
+    
+        /// Deletes the currently editing exercise.
+    func deleteExercise() {
+        if let exerciseToDelete = editingCardio {
+            dataService.delete(exerciseToDelete)
+        } else if let exerciseToDelete = editingStrength {
+            dataService.delete(exerciseToDelete)
+        } else {
+            print("Error: Attempted to delete a new entry.")
+        }
+    }
+    
+        // MARK: - Private Helpers
+    
+        /// Fetches and sorts the exercise types based on the current mode.
+    private func loadSortedTypes() {
+        let (allExercises, defaults): ([any Exercise], [String]) = {
+            switch mode {
+                case .cardio:
+                    return (dataService.fetchAllCardioExercises() ?? [], defaultCardioTypes)
+                case .strength:
+                    return (dataService.fetchAllStrengthExercises() ?? [], defaultStrengthTypes)
+            }
+        }()
+        
+        var counts: [String: Int] = [:]
+        for exercise in allExercises {
+            counts[exercise.exerciseType, default: 0] += 1
+        }
+        
+        let recordedTypes = Set(counts.keys)
+        let allUniqueTypes = recordedTypes.union(defaults)
+        
+        let sortedTypes = allUniqueTypes.sorted { (type1, type2) -> Bool in
+            let count1 = counts[type1] ?? 0
+            let count2 = counts[type2] ?? 0
+            
+            if count1 != count2 {
+                return count1 > count2
+            } else {
+                return type1 < type2
+            }
+        }
+        
+        allTypes = sortedTypes
+    }
+}

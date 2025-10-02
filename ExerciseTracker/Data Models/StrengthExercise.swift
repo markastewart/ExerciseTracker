@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class StrengthExercise {
+final class StrengthExercise: Exercise {
     var exerciseDate: Date = Date.now
     var exerciseType: String = ""
     var sets: Int = 0

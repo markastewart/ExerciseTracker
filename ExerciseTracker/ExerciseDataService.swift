@@ -107,3 +107,14 @@ class ExerciseDataService {
         }
     }
 }
+
+    // MARK: - Extension for Type-Safe Fetching
+extension ExerciseDataService {
+        /// Generic fetch for the last entry based on a FetchDescriptor
+    func fetchLast<T: Exercise>(descriptor: FetchDescriptor<T>) -> T? {
+        guard let modelContext = self.modelContext else {
+            fatalError("Error: Unable to obtain modelContext")
+        }
+        return try? modelContext.fetch(descriptor).first
+    }
+}

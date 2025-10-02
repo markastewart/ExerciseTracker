@@ -29,7 +29,7 @@ struct CardioProgressView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: CardioEntryView()) {
+                NavigationLink(destination: ExerciseEntryView()) {
                     Image(systemName: "plus.circle.fill")
                 }
                 
