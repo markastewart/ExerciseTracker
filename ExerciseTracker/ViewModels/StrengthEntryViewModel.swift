@@ -35,12 +35,12 @@ import SwiftData
             self.recordedDate = exercise.recordedDate
         } else {
                 // New entry
-            self.exerciseDate = Date()
+            self.exerciseDate = Date.now
             self.exerciseType = ""
             self.sets = 0
             self.reps = 0
             self.weight = 0
-            self.recordedDate = Date()
+            self.recordedDate = Date.now
             setDefaultValues()
         }
         
@@ -127,7 +127,7 @@ import SwiftData
         } else {
                 // Create a new entry
             exerciseToSave = StrengthExercise()
-            exerciseToSave.recordedDate = Date()
+            exerciseToSave.recordedDate = Date.now
         }
         
         exerciseToSave.exerciseDate = exerciseDate

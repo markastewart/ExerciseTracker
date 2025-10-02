@@ -19,7 +19,7 @@ struct CardioProgressView: View {
     var endDate: Date   // Required for date padding
     
         /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
-    @State private var viewModel = CardioProgressViewModel(exercises: [], startDate: Date(), endDate: Date())
+    @State private var viewModel = CardioProgressViewModel(exercises: [], startDate: Date.now, endDate: Date.now)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {

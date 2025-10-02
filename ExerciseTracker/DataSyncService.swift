@@ -150,7 +150,7 @@ class DataSyncService {
     
         // Prepares the data for export by writing it to a temporary file
     func prepareFileForExport() -> URL? {
-        let dateString = DateFormatter.filenameDateFormatter.string(from: Date())
+        let dateString = DateFormatter.filenameDateFormatter.string(from: Date.now)
         let fileURL = URL.temporaryDirectory.appending(path: "WorkoutData-\(dateString).csv")
         
         let csvString = self.exportData()

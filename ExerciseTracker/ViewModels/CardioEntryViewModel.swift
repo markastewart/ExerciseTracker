@@ -38,13 +38,13 @@ import SwiftData
             self.recordedDate = exercise.recordedDate // Preserve original date
         } else {
                 // Case 2: New entry (set defaults)
-            self.exerciseDate = Date()
+            self.exerciseDate = Date.now
             self.exerciseType = ""
             self.duration = 0.0
             self.distance = 0.0
             self.calories = 0
             self.incline = 0.0
-            self.recordedDate = Date()
+            self.recordedDate = Date.now
         }
         
         loadSortedCardioTypes()
@@ -143,7 +143,7 @@ import SwiftData
         } else {
                 // Create a new entry
             exerciseToSave = CardioExercise()
-            exerciseToSave.recordedDate = Date()
+            exerciseToSave.recordedDate = Date.now
         }
         
         exerciseToSave.exerciseDate = exerciseDate

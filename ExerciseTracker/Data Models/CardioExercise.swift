@@ -10,13 +10,13 @@ import SwiftData
 
 @Model
 final class CardioExercise {
-    var exerciseDate: Date = Date()
+    var exerciseDate: Date = Date.now
     var exerciseType: String = ""
     var duration: TimeInterval = 0.0
     var distance: Double = 0.0
     var calories: Int = 0
     var incline: Double = 0.0
-    var recordedDate: Date = Date()
+    var recordedDate: Date = Date.now
 
     init() {
     }

@@ -15,8 +15,8 @@ struct DashboardView: View {
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
 
-    @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
-    @State private var endDate = Date()
+    @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date.now)!
+    @State private var endDate = Date.now
     @State private var showDataSyncSheet = false
     @State private var rangeChoice: DateRangeSelector.RangeChoice = .week
 

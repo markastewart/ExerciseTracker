@@ -21,8 +21,8 @@ struct AggregatedStrengthData: Identifiable {
     
     private var exercises: [StrengthExercise] = []
     var filteredExercises: [StrengthExercise] = []
-    private var startDate: Date = Date()
-    private var endDate: Date = Date()
+    private var startDate: Date = Date.now
+    private var endDate: Date = Date.now
     
     init(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
         self.exercises = exercises

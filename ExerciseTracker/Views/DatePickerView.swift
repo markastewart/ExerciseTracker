@@ -17,6 +17,6 @@ struct DatePickerView: View {
 }
 
 #Preview {
-    @Previewable @State var selectedDate = Date()
+    @Previewable @State var selectedDate = Date.now
     return DatePickerView(initialDate: $selectedDate)
 }

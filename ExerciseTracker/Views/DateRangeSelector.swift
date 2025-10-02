@@ -50,7 +50,7 @@ struct DateRangeSelector: View {
             if choice == .custom {
                 HStack {
                     DatePicker("From", selection: $startDate, in: ...endDate, displayedComponents: .date)
-                    DatePicker("To", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
+                    DatePicker("To", selection: $endDate, in: startDate...Date.now, displayedComponents: .date)
                 }
                 .font(.headline)
             }
@@ -67,8 +67,8 @@ struct DateRangeSelector: View {
                 setDates(for: newRange)
             }
         }
-            // Handle external updates (e.g., new exercise). Dates are "refreshed" to the current time if a relative range is selected. By watching Date(), ensure range (like "Last 7 Days") is always pinned to now.
-        .onChange(of: Date()) {
+            // Handle external updates (e.g., new exercise). Dates are "refreshed" to the current time if a relative range is selected. By watching Date.now, ensure range (like "Last 7 Days") is always pinned to now.
+        .onChange(of: Date.now) {
             if choice != .custom {
                 setDates(for: choice)
             }
@@ -76,7 +76,7 @@ struct DateRangeSelector: View {
     }
 
     private func setDates(for range: RangeChoice) {
-        let now = Date()
+        let now = Date.now
         switch range {
         case .week:
             startDate = Calendar.current.date(byAdding: .day, value: -6, to: now)!

@@ -25,8 +25,8 @@ struct AggregatedCardioData: Identifiable {
     
     private var exercises: [CardioExercise] = []
     var filteredExercises: [CardioExercise] = []
-    private var startDate: Date = Date()
-    private var endDate: Date = Date()
+    private var startDate: Date = Date.now
+    private var endDate: Date = Date.now
     
     init(exercises: [CardioExercise], startDate: Date, endDate: Date) {
         self.exercises = exercises

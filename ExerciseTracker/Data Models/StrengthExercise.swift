@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 final class StrengthExercise {
-    var exerciseDate: Date = Date()
+    var exerciseDate: Date = Date.now
     var exerciseType: String = ""
     var sets: Int = 0
     var reps: Int = 0
     var weight: Int = 0
-    var recordedDate: Date = Date()
+    var recordedDate: Date = Date.now
 
     init() {
     }
