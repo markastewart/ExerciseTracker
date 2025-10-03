@@ -20,15 +20,18 @@ struct AggregatedStrengthData: Identifiable {
     var aggregatedData: [AggregatedStrengthData] = []
     
     private var exercises: [StrengthExercise] = []
-    var filteredExercises: [StrengthExercise] = []
     private var startDate: Date = Date.now
     private var endDate: Date = Date.now
+    
+        /// Filters the exercises based on the current range.
+    var filteredExercises: [StrengthExercise] {
+        return exercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
+    }
     
     init(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
-        filteredExercises = exercises.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate}
         aggregateData()
     }
     
@@ -37,7 +40,6 @@ struct AggregatedStrengthData: Identifiable {
         self.exercises = exercises
         self.startDate = startDate
         self.endDate = endDate
-        filteredExercises = exercises.filter { $0.exerciseDate >= startDate && $0.exerciseDate <= endDate}
         aggregateData()
     }
 

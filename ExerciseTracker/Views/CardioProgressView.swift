@@ -16,7 +16,14 @@ struct CardioProgressView: View {
     var endDate: Date
     
     @Query private var exercises: [CardioExercise]
-    @State private var viewModel = CardioProgressViewModel(exercises: [], startDate: Date.now, endDate: Date.now)
+    @State private var viewModel:  CardioProgressViewModel
+    
+        // Custom initializer to set up the @State property correctly
+    init(startDate: Date, endDate: Date) {
+        self.startDate = startDate
+        self.endDate = endDate
+        _viewModel = State(initialValue: CardioProgressViewModel(exercises: [], startDate: startDate, endDate: endDate))
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -36,7 +43,7 @@ struct CardioProgressView: View {
             }
             .padding([.horizontal, .top])
             
-            if exercises.count == 0 {
+            if viewModel.filteredExercises.isEmpty {
                 Text("No data for this date range.")
                     .padding()
             } else {
