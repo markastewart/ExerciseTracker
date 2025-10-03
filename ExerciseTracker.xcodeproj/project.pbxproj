@@ -29,9 +29,22 @@
 		564243C92E5FC59700BC8329 /* ExerciseTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExerciseTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		56764F672E90517300460B10 /* Exceptions for "ExerciseTracker" folder in "ExerciseTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 564243AC2E5FC59400BC8329 /* ExerciseTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		564243AF2E5FC59400BC8329 /* ExerciseTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				56764F672E90517300460B10 /* Exceptions for "ExerciseTracker" folder in "ExerciseTracker" target */,
+			);
 			path = ExerciseTracker;
 			sourceTree = "<group>";
 		};
@@ -394,12 +407,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = LiftRun;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = ExerciseTracker/ExerciseTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ExerciseTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = A3U2TBAN9S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExerciseTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "LIft & Run";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -427,12 +442,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = LiftRun;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = ExerciseTracker/ExerciseTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ExerciseTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = A3U2TBAN9S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExerciseTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "LIft & Run";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
