@@ -6,19 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 import Charts
 import Foundation
 
+    /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
 struct StrengthProgressView: View {
-    
-        /// The raw exercise data passed from the parent view.
-    var exercises: [StrengthExercise]
-    
-        /// The specific date range needed by the view model to pad missing data.
     var startDate: Date
     var endDate: Date
     
-        /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
+    @Query private var exercises: [StrengthExercise]
     @State private var viewModel = StrengthProgressViewModel(exercises: [], startDate: Date.now, endDate: Date.now)
     
     var body: some View {
@@ -62,7 +59,7 @@ struct StrengthProgressView: View {
         .onAppear {
             viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
-        .onChange(of: exercises.count) {
+        .onChange(of: exercises) {
             viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
         .onChange(of: [startDate, endDate]) {

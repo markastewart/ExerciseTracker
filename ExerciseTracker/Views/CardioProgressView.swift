@@ -6,19 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 import Charts
 import Foundation
 
+    /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
 struct CardioProgressView: View {
+    var startDate: Date
+    var endDate: Date
     
-        /// The raw exercise data passed from the parent view.
-    var exercises: [CardioExercise]
-    
-        /// The specific date range needed by the view model to pad missing data.
-    var startDate: Date // Required for date padding
-    var endDate: Date   // Required for date padding
-    
-        /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
+    @Query private var exercises: [CardioExercise]
     @State private var viewModel = CardioProgressViewModel(exercises: [], startDate: Date.now, endDate: Date.now)
     
     var body: some View {
@@ -74,7 +71,7 @@ struct CardioProgressView: View {
         .onAppear{
             viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
-        .onChange(of: exercises.count) {
+        .onChange(of: exercises) {
             viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
         .onChange(of: [startDate, endDate]) {

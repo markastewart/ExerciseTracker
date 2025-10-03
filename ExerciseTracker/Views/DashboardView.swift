@@ -11,9 +11,6 @@ import SwiftData
 import Foundation
 
 struct DashboardView: View {
-    @Query private var allStrength: [StrengthExercise]
-    @Query private var allCardio: [CardioExercise]
-
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date.now)!
     @State private var endDate = Date.now
     @State private var showDataSyncSheet = false
@@ -26,9 +23,9 @@ struct DashboardView: View {
                     DateRangeSelector(startDate: $startDate, endDate: $endDate, choice: $rangeChoice)
                         .padding(.leading, 7)
                     
-                    CardioProgressView(exercises: allCardio, startDate: startDate, endDate: endDate)
+                    CardioProgressView(startDate: startDate, endDate: endDate)
                     
-                    StrengthProgressView(exercises: allStrength, startDate: startDate, endDate: endDate)
+                    StrengthProgressView(startDate: startDate, endDate: endDate)
                     
                     LastExerciseAddedView()
                 }
