@@ -10,17 +10,11 @@ import SwiftData
 
 @Observable class ExerciseEntryViewModel {
     
-        // MARK: - Exercise Type Definition
-    enum ExerciseType: String, CaseIterable {
-        case cardio = "Cardio"
-        case strength = "Strength"
-    }
-    
-        // MARK: - Core Properties (Unified)
+        // MARK: - Core Properties
     var mode: ExerciseType = .cardio
-    var exerciseDate: Date = Date()
-    var exerciseType: String = "" // e.g., "Treadmill" or "Bicep Curl"
-    var recordedDate: Date = Date()
+    var exerciseDate: Date = Date.now
+    var exerciseType: String = ""
+    var recordedDate: Date = Date.now
     
         // MARK: - Cardio Properties
     var duration: TimeInterval = 0.0
@@ -45,7 +39,8 @@ import SwiftData
     private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Lateral Pull", "Leg Curl", "Leg Extensions", "Seated Row", "Shoulder Press"]
     
         /// Initializes the ViewModel for a new entry or editing an existing one.
-    init(editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
+    init(exerciseMode: ExerciseType, editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
+        self.mode = exerciseMode
         self.editingCardio = editingCardio
         self.editingStrength = editingStrength
         
@@ -66,9 +61,6 @@ import SwiftData
             self.reps = exercise.reps
             self.weight = exercise.weight
             self.recordedDate = exercise.recordedDate
-        } else {
-                // New entry, default to Cardio
-            self.mode = .cardio
         }
         
         loadSortedTypes()
@@ -81,21 +73,7 @@ import SwiftData
         }
     }
     
-        // MARK: - Public Actions
-    
-        /// Called when the user switches the Exercise Type picker.
-    func handleModeChange() {
-            // Recalculate the available exercise types for the new mode
-        loadSortedTypes()
-        
-            // Set the exerciseType to the new default (most frequent/first alphabetical)
-        exerciseType = allTypes.first ?? ""
-        
-            // Load the last entered values for the newly selected type
-        loadLastEntry()
-    }
-    
-        /// Loads the values from the most recent entry matching the current mode and exerciseType.
+        /// Loads the values from the most recent entry matching the current exercise mode and exerciseType.
     func loadLastEntry() {
         guard !isEditing else { return } // Only load defaults for new entries
         
@@ -179,9 +157,7 @@ import SwiftData
         }
     }
     
-        // MARK: - Private Helpers
-    
-        /// Fetches and sorts the exercise types based on the current mode.
+        /// Fetches and sorts the exercise types based on the current exericise mode.
     private func loadSortedTypes() {
         let (allExercises, defaults): ([any Exercise], [String]) = {
             switch mode {
@@ -210,7 +186,6 @@ import SwiftData
                 return type1 < type2
             }
         }
-        
         allTypes = sortedTypes
     }
 }

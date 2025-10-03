@@ -106,10 +106,10 @@ struct LastExerciseAddedView: View {
         switch viewModel.lastExercise {
             case .cardio(let cardio):
                     // Pass existing CardioExercise model for editing
-                CardioEntryView(editingExercise: cardio)
+                ExerciseEntryView(exerciseMode: .cardio, editingCardio: cardio)
             case .strength(let strength):
                     // Pass existing StrengthExercise model for editing
-                StrengthEntryView(editingExercise: strength)
+                ExerciseEntryView(exerciseMode: .strength, editingStrength: strength)
             default:
                     // This case ideally never reached if the view is being tapped,
                 Text("No exercise data to edit.")

@@ -29,7 +29,7 @@ struct StrengthProgressView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: ExerciseEntryView()) {
+                NavigationLink(destination: ExerciseEntryView(exerciseMode: .strength)) {
                     Image(systemName: "plus.circle.fill")
                 }
                 

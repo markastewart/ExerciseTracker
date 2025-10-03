@@ -14,3 +14,8 @@ import SwiftData
         var exerciseType: String { get set }
         var exerciseDate: Date { get set }
     }
+
+enum ExerciseType: String, CaseIterable {
+    case cardio = "Cardio"
+    case strength = "Strength"
+}

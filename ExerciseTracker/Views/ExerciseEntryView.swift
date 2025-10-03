@@ -15,8 +15,9 @@ struct ExerciseEntryView: View {
     @State private var showingDeleteAlert = false
     
         // Custom initializer to accept either a Cardio or Strength model for editing
-    init(editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
+    init(exerciseMode: ExerciseType, editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
         _viewModel = State(initialValue: ExerciseEntryViewModel(
+            exerciseMode: exerciseMode,
             editingCardio: editingCardio,
             editingStrength: editingStrength
         ))
@@ -28,49 +29,36 @@ struct ExerciseEntryView: View {
     
     var body: some View {
         Form {
-                // Select between Cardio and Strength
-            Picker("Exercise Category", selection: $viewModel.mode) {
-                ForEach(ExerciseEntryViewModel.ExerciseType.allCases, id: \.self) { type in
-                    Text(type.rawValue)
-                }
-            }
-                // When the category changes, update the available types and load last entry
-            .onChange(of: viewModel.mode) {
-                viewModel.handleModeChange()
-            }
-            .disabled(isEditing) // Cannot change category when editing an existing entry
-            
                 // Select the specific exercise type (e.g., Treadmill, Bicep Curl)
             Picker("Exercise Type", selection: $viewModel.exerciseType) {
                 ForEach(viewModel.allTypes, id: \.self) { type in
                     Text(type)
                 }
             }
-                // Date Picker (Shared)
+                // Date Picker
             DatePickerView(initialDate: $viewModel.exerciseDate)
-                // Only load last entry data when the user changes the type IF they are creating a new entry
+                // Only load last entry data when user changes the type when creating a new entry
                 .onChange(of: viewModel.exerciseType) {
                     viewModel.loadLastEntry()
                 }
             
             Section("Details") {
-                    // Show Cardio fields if mode is Cardio
                 if viewModel.mode == .cardio {
                     CardioDetailsSection(viewModel: viewModel)
                 }
-                    // Show Strength fields if mode is Strength
                 else {
                     StrengthDetailsSection(viewModel: viewModel)
                 }
             }
         }
-        .navigationTitle(isEditing ? "Edit Exercise" : "Add Exercise")
+        .navigationTitle(isEditing ? "Edit \(viewModel.mode.rawValue) Exercise" : "Add \(viewModel.mode.rawValue) Exercise")
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }
                     .buttonStyle(.borderedProminent).tint(.gray)
             }
+
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
                     viewModel.saveOrUpdateExercise()
@@ -155,5 +143,5 @@ struct StrengthDetailsSection: View {
 }
 
 #Preview {
-    ExerciseEntryView()
+    ExerciseEntryView(exerciseMode: .cardio)
 }
