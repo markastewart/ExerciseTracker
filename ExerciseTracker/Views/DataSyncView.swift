@@ -45,18 +45,17 @@ struct DataSyncView: View {
                 case .success(let url):
                             // Gain permission to access the file
                         guard url.startAccessingSecurityScopedResource() else {
-                            print("Failed to start accessing security-scoped resource.")
-                            return
+                            fatalError("Failed to start accessing security-scoped resource.")
                         }
                     do {
                         let csvString = try String(contentsOf: url, encoding: .utf8)
                         let dataSyncService = DataSyncService(modelContext: modelContext)
                         dataSyncService.importData(csvString: csvString)
                     } catch {
-                        print("Failed to read or process file for import: \(error)")
+                        fatalError("Failed to read or process file for import: \(error)")
                     }
                 case .failure(let error):
-                    print("File import failed: \(error)")
+                        fatalError("File import failed: \(error)")
                 }
             }
         }

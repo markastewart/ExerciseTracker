@@ -37,7 +37,7 @@ class DataSyncService {
                 exportString += line
             }
         } catch {
-            print("Failed to fetch cardio data for export: \(error)")
+            fatalError("Failed to fetch cardio data for export: \(error)")
         }
         
             // Export Strength Data
@@ -54,7 +54,7 @@ class DataSyncService {
                 exportString += line
             }
         } catch {
-            print("Failed to fetch strength data for export: \(error)")
+            fatalError("Failed to fetch strength data for export: \(error)")
         }
         
         return exportString
@@ -143,7 +143,7 @@ class DataSyncService {
                 try modelContext.save()
                 print("Data successfully imported.")
             } catch {
-                print("Failed to save imported data: \(error)")
+                fatalError("Failed to save imported data: \(error)")
             }
         }
     }
@@ -158,8 +158,7 @@ class DataSyncService {
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
             return fileURL
         } catch {
-            print("Failed to write temporary file: \(error)")
-            return nil
+            fatalError("Failed to write temporary file: \(error)")
         }
     }
 }
