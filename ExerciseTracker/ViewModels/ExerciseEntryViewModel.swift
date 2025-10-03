@@ -148,12 +148,10 @@ import SwiftData
     
         /// Deletes the currently editing exercise.
     func deleteExercise() {
-        if let exerciseToDelete = editingCardio {
-            dataService.delete(exerciseToDelete)
-        } else if let exerciseToDelete = editingStrength {
+        if let exerciseToDelete: any PersistentModel = editingCardio ?? editingStrength {
             dataService.delete(exerciseToDelete)
         } else {
-            print("Error: Attempted to delete a new entry.")
+            fatalError("Error: Attempted to delete a new entry.")
         }
     }
     
