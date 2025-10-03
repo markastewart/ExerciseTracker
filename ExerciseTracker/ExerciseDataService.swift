@@ -27,23 +27,21 @@ class ExerciseDataService {
         // A generic function to save any Model
     func save<T: PersistentModel>(_ model: T) {
         guard let context = modelContext else {
-            print("ModelContext not set.")
-            return
+            fatalError("ModelContext not set.")
         }
         context.insert(model)
         do {
             try context.save()
             print("Successfully saved \(T.self).")
         } catch {
-            print("Failed to save \(T.self): \(error.localizedDescription)")
+            fatalError("Failed to save \(T.self): \(error.localizedDescription)")
         }
     }
     
         // Fetch exercises for a specific day
     func fetchExercises(for date: Date) -> (cardio: [CardioExercise], strength: [StrengthExercise]) {
         guard let context = modelContext else {
-            print("ModelContext not set.")
-            return ([], [])
+            fatalError("ModelContext not set.")
         }
             // Define the start and end of the day
         let startOfDay = Calendar.current.startOfDay(for: date)
@@ -65,51 +63,47 @@ class ExerciseDataService {
             let strengthResults = try context.fetch(strengthDescriptor)
             return (cardioResults, strengthResults)
         } catch {
-            print("Failed to fetch exercises for date \(date): \(error.localizedDescription)")
-            return ([], [])
+            fatalError("Failed to fetch exercises for date \(date): \(error.localizedDescription)")
         }
     }
     
         // Fetch all cardio exercises
     func fetchAllCardioExercises() -> [CardioExercise]? {
         guard let context = modelContext else {
-            print("ModelContext not set.")
-            return nil
+            fatalError("ModelContext not set.")
         }
         do {
             return try context.fetch(FetchDescriptor<CardioExercise>())
         } catch {
-            print("Failed to fetch all cardio exercises: \(error)")
-            return nil
+            fatalError("Failed to fetch all cardio exercises: \(error)")
         }
     }
     
         // Fetch all strength exercises
     func fetchAllStrengthExercises() -> [StrengthExercise]? {
         guard let context = modelContext else {
-            print("ModelContext not set.")
-            return nil
+            fatalError("ModelContext not set.")
         }
         do {
             return try context.fetch(FetchDescriptor<StrengthExercise>())
         } catch {
-            print("Failed to fetch all strength exercises: \(error)")
-            return nil
+            fatalError("Failed to fetch all strength exercises: \(error)")
         }
     }
     
     func delete<T: PersistentModel>(_ model: T) {
+        guard let context = modelContext else {
+            fatalError("ModelContext not set.")
+        }
+        
         do {
             modelContext?.delete(model)
             try modelContext?.save() // Not strictly needed, but common practice
         } catch {
-            print("Error deleting model: \(error)")
+            fatalError("Error deleting model: \(error)")
         }
     }
-}
-
-    // MARK: - Extension for Type-Safe Fetching
-extension ExerciseDataService {
+    
         /// Generic fetch for the last entry based on a FetchDescriptor
     func fetchLast<T: Exercise>(descriptor: FetchDescriptor<T>) -> T? {
         guard let modelContext = self.modelContext else {

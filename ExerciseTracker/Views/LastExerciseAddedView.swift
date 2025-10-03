@@ -10,8 +10,6 @@ import SwiftData
 
 struct LastExerciseAddedView: View {
     @State private var viewModel = LastExerciseAddedViewModel()
-    
-        // @Query properties trigger the refresh when data changes
     @Query private var allStrength: [StrengthExercise]
     @Query private var allCardio: [CardioExercise]
     
