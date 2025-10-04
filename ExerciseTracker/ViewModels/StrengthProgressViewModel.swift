@@ -8,81 +8,82 @@
 import Foundation
 import SwiftData
 
-    /// A struct to hold aggregated strength data for a single day.
-struct AggregatedStrengthData: Identifiable {
+    /// The aggregated data structure must conform to the ProgressData protocol.
+struct AggregatedStrengthData: ProgressData {
     let id = UUID()
-    let date: Date
+    let aggregationStartDate: Date
     let totalWeightLifted: Int
 }
 
 @Observable class StrengthProgressViewModel {
-        /// The aggregated data, published for the view to observe.
     var aggregatedData: [AggregatedStrengthData] = []
     
-    private var exercises: [StrengthExercise] = []
-    private var startDate: Date = Date.now
-    private var endDate: Date = Date.now
+    private var allExercises: [StrengthExercise] = []
+    private(set) var startDate: Date
+    private(set) var endDate: Date
     
-        /// Filters the exercises based on the current range.
+        /// Accessor for the dynamic aggregator instance (Non-generic class).
+    private var aggregator: ExerciseProgressAggregator {
+        return ExerciseProgressAggregator()
+    }
+    
+        /// Determines the appropriate aggregation unit based on the date range length.
+    var aggregationUnit: AggregationUnit {
+        return aggregator.aggregationUnit
+    }
+    
+        /// Provides the correct formatter for the X-axis based on the current aggregation unit.
+    var xAxisDateFormatter: DateFormatter {
+        return aggregator.xAxisDateFormatter
+    }
+    
+        /// Filters the exercises based on the current range (kept for simplicity and debugging).
     var filteredExercises: [StrengthExercise] {
-        return exercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
+        return allExercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
     }
     
     init(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
-        self.exercises = exercises
+        self.allExercises = exercises
         self.startDate = startDate
         self.endDate = endDate
         aggregateData()
     }
     
-        /// Public method to update the exercises array and re-aggregate data.
+        // Re-aggregate if the raw data or range has actually changed.
     func update(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
-        self.exercises = exercises
-        self.startDate = startDate
-        self.endDate = endDate
-        aggregateData()
+        if self.allExercises.count != exercises.count || self.startDate != startDate || self.endDate != endDate {
+            self.allExercises = exercises
+            self.startDate = startDate
+            self.endDate = endDate
+            aggregateData()
+        }
     }
-
-        /// Aggregates raw exercise data into daily totals, padding with zero entries for missing days.
+    
+        /// Aggregates raw exercise data into dynamic buckets (Day, Week, Month, or Year).
     func aggregateData() {
-        let calendar = Calendar.current
         
-            // Aggregate the actual data into a dictionary keyed by the date's startOfDay
-        let actualData: [Date: AggregatedStrengthData] = Dictionary(grouping: exercises) { exercise in
-            calendar.startOfDay(for: exercise.exerciseDate)
-        }
-        .compactMapValues { dailyExercises in
-            let date = calendar.startOfDay(for: dailyExercises.first!.exerciseDate)
-            let totalWeightLifted = dailyExercises.reduce(0) { $0 + ($1.weight * $1.sets * $1.reps) }
+            // Define the data-specific aggregation logic
+        let dataAggregator: (Date, [StrengthExercise]) -> AggregatedStrengthData = { dateKey, exercisesForPeriod in
             
-            return AggregatedStrengthData(
-                date: date,
-                totalWeightLifted: totalWeightLifted,
-            )
+                // Strength Aggregation Calculation: Total Weight Lifted = Sum of (Weight * Sets * Reps)
+            let totalWeightLifted = exercisesForPeriod.reduce(0) {
+                    $0 + ($1.weight * $1.sets * $1.reps) }
+            
+            return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: totalWeightLifted)
         }
         
-            // Generate a list of all dates in the range
-        var date = calendar.startOfDay(for: startDate)
-        let endOfRange = calendar.startOfDay(for: endDate)
-        var fullDateRange: [Date] = []
-        
-        while date <= endOfRange {
-            fullDateRange.append(date)
-            date = calendar.date(byAdding: .day, value: 1, to: date)!
+            // Define the zero-padding data creator
+        let zeroDataCreator: (Date) -> AggregatedStrengthData = { dateKey in
+            return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: 0)
         }
         
-                // Merge the full date range with the actual data, filling in zeros
-            aggregatedData = fullDateRange.map { day in
-            if let data = actualData[day] {
-                return data
-            } else {
-                    // Pad with zero data for days without exercises
-                return AggregatedStrengthData(
-                    date: day,
-                    totalWeightLifted: 0,
-                )
-            }
-        }
-        .sorted { $0.date < $1.date }
+            // Perform the aggregation using the service
+        self.aggregatedData = aggregator.aggregate(
+            rawExercises: allExercises,
+            startDate: startDate,
+            endDate: endDate,
+            zeroData: zeroDataCreator,
+            dataAggregator: dataAggregator
+        )
     }
 }

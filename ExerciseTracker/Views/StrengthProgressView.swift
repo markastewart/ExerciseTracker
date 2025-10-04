@@ -50,7 +50,7 @@ struct StrengthProgressView: View {
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
-                            x: .value("Date", dayData.date),
+                            x: .value("Date", dayData.aggregationStartDate),
                             y: .value("Total Weight Lifted", dayData.totalWeightLifted)
                         )
                         .foregroundStyle(by: .value("Metric", "Total Weight Lifted"))
