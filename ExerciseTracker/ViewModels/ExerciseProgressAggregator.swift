@@ -10,7 +10,7 @@ import Observation
 import SwiftData
 
     /// Defines how the data should be aggregated and how the chart's X-axis should be formatted.
-enum AggregationUnit {
+enum AggregationPeriod {
     case daily
     case weekly
     case monthly
@@ -29,12 +29,12 @@ protocol ProgressData: Identifiable {
     private let calendar = Calendar.current
     
         // Properties determined by the date range
-    private(set) var aggregationUnit: AggregationUnit = .daily
+    private(set) var aggregationPeriod: AggregationPeriod = .daily
     
         /// Provides the correct formatter for the X-axis based on the current aggregation unit.
     var xAxisDateFormatter: DateFormatter {
         let formatter = DateFormatter()
-        switch aggregationUnit {
+        switch aggregationPeriod {
             case .daily:
                 formatter.dateFormat = "MMM d" // e.g., Jun 15
             case .weekly:
@@ -47,18 +47,18 @@ protocol ProgressData: Identifiable {
         return formatter
     }
     
-        /// Determines the appropriate aggregation unit based on the date range length.
-    private func determineUnit(from startDate: Date, to endDate: Date) {
+        /// Determines the appropriate aggregation unit based on the date range length and returns to caller.
+    private func setAggregationPeriod(from startDate: Date, to endDate: Date) {
         let days = calendar.dateComponents([.day], from: startDate.startOfDay, to: endDate.endOfDay).day ?? 0
         
         if days <= 7 {
-            aggregationUnit = .daily
+            aggregationPeriod = .daily
         } else if days <= 31 {
-            aggregationUnit = .weekly
+            aggregationPeriod = .weekly
         } else if days <= (365 + 90) { // Approx 15 months
-            aggregationUnit = .monthly
+            aggregationPeriod = .monthly
         } else {
-            aggregationUnit = .yearly
+            aggregationPeriod = .yearly
         }
     }
     
@@ -75,15 +75,14 @@ protocol ProgressData: Identifiable {
         startDate: Date, endDate: Date, zeroData: (Date) -> AggregatedData,
         dataAggregator: (Date, [RawExercise]) -> AggregatedData) -> [AggregatedData] where RawExercise: Exercise {
         
-        determineUnit(from: startDate, to: endDate)
-        let unit = aggregationUnit
+        setAggregationPeriod(from: startDate, to: endDate)
         
             // Filter exercises within the date range
         let filteredExercises = rawExercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
         
             // Group the filtered data based on the dynamic aggregation unit.
         let groupedData = Dictionary(grouping: filteredExercises) { exercise in
-            switch unit {
+            switch aggregationPeriod {
                 case .daily:
                     return calendar.startOfDay(for: exercise.exerciseDate)
                 case .weekly:
@@ -105,7 +104,7 @@ protocol ProgressData: Identifiable {
             var component: Calendar.Component
             var value: Int
             
-            switch unit {
+            switch aggregationPeriod {
                 case .daily:
                     key = calendar.startOfDay(for: dateIterator)
                     component = .day; value = 1

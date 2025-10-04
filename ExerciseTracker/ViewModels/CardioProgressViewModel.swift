@@ -34,8 +34,8 @@ struct AggregatedCardioData: ProgressData {
     }
     
         /// Accesses the aggregator's unit for view logic (if needed).
-    var aggregationUnit: AggregationUnit {
-        return aggregator.aggregationUnit
+    var aggregationUnit: AggregationPeriod {
+        return aggregator.aggregationPeriod
     }
     
         /// Filters the exercises based on the current range.

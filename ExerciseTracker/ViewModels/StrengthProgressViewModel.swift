@@ -28,8 +28,8 @@ struct AggregatedStrengthData: ProgressData {
     }
     
         /// Determines the appropriate aggregation unit based on the date range length.
-    var aggregationUnit: AggregationUnit {
-        return aggregator.aggregationUnit
+    var aggregationUnit: AggregationPeriod {
+        return aggregator.aggregationPeriod
     }
     
         /// Provides the correct formatter for the X-axis based on the current aggregation unit.
