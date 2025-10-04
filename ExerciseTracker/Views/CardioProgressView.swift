@@ -6,11 +6,9 @@
 //
 
 import SwiftUI
-import SwiftData
 import Charts
-import Foundation
+import SwiftData
 
-    /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
 struct CardioProgressView: View {
     var startDate: Date
     var endDate: Date
@@ -18,7 +16,6 @@ struct CardioProgressView: View {
     @Query private var exercises: [CardioExercise]
     @State private var viewModel:  CardioProgressViewModel
     
-        // Custom initializer to set up the @State property correctly
     init(startDate: Date, endDate: Date) {
         self.startDate = startDate
         self.endDate = endDate
@@ -33,13 +30,13 @@ struct CardioProgressView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: ExerciseEntryView(exerciseMode: .cardio)) {
-                    Image(systemName: "plus.circle.fill")
-                }
+                 NavigationLink(destination: ExerciseEntryView(exerciseMode: .cardio)) {
+                     Image(systemName: "plus.circle.fill")
+                 }
                 
-                NavigationLink(destination: Text("Cardio Detail View")) {
-                    Image(systemName: "list.bullet")
-                }
+                 NavigationLink(destination: Text("Cardio Detail View")) {
+                     Image(systemName: "list.bullet")
+                 }
             }
             .padding([.horizontal, .top])
             
@@ -50,10 +47,22 @@ struct CardioProgressView: View {
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
-                            x: .value("Date", dayData.date),
+                            x: .value("Date", dayData.aggregationStartDate),
                             y: .value("Calories", dayData.totalCalories)
                         )
                         .foregroundStyle(by: .value("Metric", "Calories"))
+                    }
+                }
+                    // IMPORTANT: Customize the X-Axis to use the ViewModel's dynamic formatter
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel {
+                            if let date = value.as(Date.self) {
+                                Text(viewModel.xAxisDateFormatter.string(from: date))
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -61,10 +70,21 @@ struct CardioProgressView: View {
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
-                            x: .value("Date", dayData.date),
+                            x: .value("Date", dayData.aggregationStartDate),
                             y: .value("Pace", dayData.averagePace)
                         )
                         .foregroundStyle(by: .value("Metric", "Pace"))
+                    }
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel {
+                            if let date = value.as(Date.self) {
+                                Text(viewModel.xAxisDateFormatter.string(from: date))
+                            }
+                        }
                     }
                 }
                 .chartForegroundStyleScale(["Pace": .green])
@@ -75,7 +95,7 @@ struct CardioProgressView: View {
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .onAppear{
+        .onAppear {
             viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
         }
         .onChange(of: exercises) {
