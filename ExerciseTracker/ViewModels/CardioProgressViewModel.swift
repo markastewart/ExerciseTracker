@@ -79,7 +79,6 @@ struct AggregatedCardioData: ProgressData {
                 averagePace: averagePace
             )
         }
-        
             // Define the zero-padding data creator
         let zeroDataCreator: (Date) -> AggregatedCardioData = { dateKey in
             return AggregatedCardioData(
@@ -89,7 +88,6 @@ struct AggregatedCardioData: ProgressData {
                 averagePace: 0.0
             )
         }
-        
             // Perform the aggregation using the service
         aggregatedData = aggregator.aggregate(
             rawExercises: allExercises,

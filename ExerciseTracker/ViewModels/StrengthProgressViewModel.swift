@@ -71,14 +71,12 @@ struct AggregatedStrengthData: ProgressData {
             
             return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: totalWeightLifted)
         }
-        
             // Define the zero-padding data creator
         let zeroDataCreator: (Date) -> AggregatedStrengthData = { dateKey in
             return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: 0)
         }
-        
             // Perform the aggregation using the service
-        self.aggregatedData = aggregator.aggregate(
+        aggregatedData = aggregator.aggregate(
             rawExercises: allExercises,
             startDate: startDate,
             endDate: endDate,
