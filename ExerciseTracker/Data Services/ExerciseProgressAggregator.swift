@@ -14,8 +14,6 @@ protocol ProgressData: Identifiable {
     var aggregationStartDate: Date { get }
 }
 
-    // MARK: - Aggregator Class
-
     /// A generic service class responsible for all temporal aggregation logic, date formatting, and range calculation, separating it from the specific data calculations.
 @Observable class ExerciseProgressAggregator {
     private let calendar = Calendar.current

@@ -18,10 +18,8 @@ struct AggregatedCardioData: ProgressData {
 
 @Observable class CardioProgressViewModel {
     var aggregatedData: [AggregatedCardioData] = []
-    
+    private let dateRangeService: DateRangeService
     private var allExercises: [CardioExercise] = []
-    private(set) var startDate: Date
-    private(set) var endDate: Date
     
         /// Accessor for the dynamic aggregator instance (Non-generic class).
     private var aggregator: ExerciseProgressAggregator {
@@ -40,27 +38,37 @@ struct AggregatedCardioData: ProgressData {
     
         /// Filters the exercises based on the current range.
     var filteredExercises: [CardioExercise] {
-        return allExercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
+        return allExercises.filter { $0.exerciseDate >= dateRangeService.startDate.startOfDay && $0.exerciseDate <= dateRangeService.endDate.endOfDay }
     }
     
-    init(exercises: [CardioExercise], startDate: Date, endDate: Date) {
+    init(exercises: [CardioExercise], dateRangeService: DateRangeService) {
         self.allExercises = exercises
-        self.startDate = startDate
-        self.endDate = endDate
+        self.dateRangeService = dateRangeService
         aggregateData()
     }
     
-    func update(exercises: [CardioExercise], startDate: Date, endDate: Date) {
-        if self.allExercises.count != exercises.count || self.startDate != startDate || self.endDate != endDate {
+        // 5. ADD: Cleanup observer
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+        // 6. ADD: Selector method called by NotificationCenter
+    @objc private func handleDateRangeUpdate() {
+            // When the service changes the dates, we simply re-aggregate the data.
+        aggregateData()
+    }
+    
+    func update(exercises: [CardioExercise]) {
+        if self.allExercises.count != exercises.count {
             self.allExercises = exercises
-            self.startDate = startDate
-            self.endDate = endDate
             aggregateData()
         }
     }
     
         /// Uses the DateProgressAggregator for temporal grouping and handles the data-specific aggregation.
     func aggregateData() {
+        let currentStartDate = dateRangeService.startDate
+        let currentEndDate = dateRangeService.endDate
         
             // Define the data-specific aggregation logic
         let dataAggregator: (Date, [CardioExercise]) -> AggregatedCardioData = { dateKey, exercisesForPeriod in
@@ -91,8 +99,8 @@ struct AggregatedCardioData: ProgressData {
             // Perform the aggregation using the service
         aggregatedData = aggregator.aggregate(
             rawExercises: allExercises,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: currentStartDate,
+            endDate: currentEndDate,
             zeroData: zeroDataCreator,
             dataAggregator: dataAggregator
         )

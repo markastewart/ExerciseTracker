@@ -23,7 +23,7 @@ struct DashboardView: View {
                     DateRangeSelector(dateRangeService: $dataRangeService)
                         .padding(.leading, 7)
                     
-                    CardioProgressView(startDate: startDate, endDate: endDate)
+                    CardioProgressView(dateRangeService: dataRangeService)
                     
                     StrengthProgressView(startDate: startDate, endDate: endDate)
                     
