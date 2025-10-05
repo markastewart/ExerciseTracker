@@ -14,13 +14,13 @@ struct DashboardView: View {
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date.now)!
     @State private var endDate = Date.now
     @State private var showDataSyncSheet = false
-    @State private var rangeChoice: DateRangeSelector.RangeChoice = .week
+    @State private var dataRangeService = DateRangeService()
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 15) {
-                    DateRangeSelector(startDate: $startDate, endDate: $endDate, choice: $rangeChoice)
+                    DateRangeSelector(dateRangeService: $dataRangeService)
                         .padding(.leading, 7)
                     
                     CardioProgressView(startDate: startDate, endDate: endDate)

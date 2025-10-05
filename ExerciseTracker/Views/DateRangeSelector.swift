@@ -6,22 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
 
-/// Re-usable date range picker with presets + optional custom range
+    /// Re-usable date range picker with presets + optional custom range
 struct DateRangeSelector: View {
-    enum RangeChoice: String, CaseIterable, Identifiable {
-        case week   = "Last 7 Days"
-        case month  = "Last Month"
-        case six    = "Last 6 Months"
-        case year   = "Last Year"
-        case custom = "Custom"
-        var id: String { rawValue }
-    }
-
-    @Binding var startDate: Date
-    @Binding var endDate: Date
-    @Binding var choice: RangeChoice
+    @Binding var dateRangeService: DateRangeService
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -29,15 +17,14 @@ struct DateRangeSelector: View {
                 Text("Date Range")
                     .font(.headline)
                 Menu {
-                    ForEach(RangeChoice.allCases) { option in
-                        Button(option.rawValue) {
-                            setDates(for: option)
-                            choice = option
+                    ForEach(TimePeriod.allCases) { option in
+                        Button(option.displayName) {
+                            dateRangeService.selectedPeriod = option
                         }
                     }
                 } label: {
                     HStack(spacing: 4) {
-                        Text(choice.rawValue)
+                        Text(dateRangeService.selectedPeriod.displayName)
                         Image(systemName: "chevron.down")
                             .font(.subheadline)
                     }
@@ -46,56 +33,32 @@ struct DateRangeSelector: View {
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
                 }
             }
-            
-            if choice == .custom {
+                // DatePickers bind directly to the DataRangeService custom date properties. The didSet logic in the DataRangeService will handle recalculation.
+            if dateRangeService.selectedPeriod == .custom {
                 HStack {
-                    DatePicker("From", selection: $startDate, in: ...endDate, displayedComponents: .date)
-                    DatePicker("To", selection: $endDate, in: startDate...Date.now, displayedComponents: .date)
-                }
-                .font(.headline)
+                     DatePicker("From", selection: $dateRangeService.customStartDate, in: ...dateRangeService.customEndDate, displayedComponents: .date)
+                         .onChange(of: dateRangeService.customStartDate) { _, _ in
+                             dateRangeService.setCustomDateRange(start: dateRangeService.customStartDate, end: dateRangeService.customEndDate)
+                         }
+                    
+                    DatePicker("To", selection: $dateRangeService.customEndDate, in: dateRangeService.customStartDate...Date.now, displayedComponents: .date)
+                 }
+                .padding(.horizontal)
+                .padding(.vertical, 5)
+                .font(.subheadline)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .onAppear {
-            if choice != .custom {
-                setDates(for: choice)
-            }
-        }
-            // Handle manual selection change (e.g., user switches from .month to .week
-        .onChange(of: choice) { _, newRange in
-            if newRange != .custom {
-                setDates(for: newRange)
-            }
-        }
-            // Handle external updates (e.g., new exercise). Dates are "refreshed" to the current time if a relative range is selected. By watching Date.now, ensure range (like "Last 7 Days") is always pinned to now.
-        .onChange(of: Date.now) {
-            if choice != .custom {
-                setDates(for: choice)
-            }
-        }
-    }
-
-    private func setDates(for range: RangeChoice) {
-        let now = Date.now
-        switch range {
-        case .week:
-            startDate = Calendar.current.date(byAdding: .day, value: -6, to: now)!
-            endDate   = now
-        case .month:
-            startDate = Calendar.current.date(byAdding: .month, value: -1, to: now)!
-            endDate   = now
-        case .six:
-            startDate = Calendar.current.date(byAdding: .month, value: -6, to: now)!
-            endDate   = now
-        case .year:
-            startDate = Calendar.current.date(byAdding: .year, value: -1, to: now)!
-            endDate   = now
-        case .custom:
-            break
-        }
     }
 }
 
+extension DateFormatter {
+    static let monthDayYear: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "MMM dd, yyyy" // e.g. Oct 05, 2025
+        return df
+    }()
+}
 
 #Preview {
 //    DateRangeSelector()

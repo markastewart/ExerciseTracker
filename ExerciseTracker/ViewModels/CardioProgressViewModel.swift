@@ -34,7 +34,7 @@ struct AggregatedCardioData: ProgressData {
     }
     
         /// Accesses the aggregator's unit for view logic (if needed).
-    var aggregationUnit: AggregationPeriod {
+    var aggregationUnit: DateRangePeriod {
         return aggregator.aggregationPeriod
     }
     

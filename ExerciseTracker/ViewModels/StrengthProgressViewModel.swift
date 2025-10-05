@@ -28,7 +28,7 @@ struct AggregatedStrengthData: ProgressData {
     }
     
         /// Determines the appropriate aggregation unit based on the date range length.
-    var aggregationUnit: AggregationPeriod {
+    var aggregationUnit: DateRangePeriod {
         return aggregator.aggregationPeriod
     }
     

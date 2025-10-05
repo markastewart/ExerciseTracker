@@ -9,14 +9,6 @@ import Foundation
 import Observation
 import SwiftData
 
-    /// Defines how the data should be aggregated and how the chart's X-axis should be formatted.
-enum AggregationPeriod {
-    case daily
-    case weekly
-    case monthly
-    case yearly
-}
-
     /// The protocol that all aggregated data structs (like AggregatedCardioData) must conform to.
 protocol ProgressData: Identifiable {
     var aggregationStartDate: Date { get }
@@ -29,7 +21,7 @@ protocol ProgressData: Identifiable {
     private let calendar = Calendar.current
     
         // Properties determined by the date range
-    private(set) var aggregationPeriod: AggregationPeriod = .daily
+    private(set) var aggregationPeriod: DateRangePeriod = .daily
     
         /// Provides the correct formatter for the X-axis based on the current aggregation unit.
     var xAxisDateFormatter: DateFormatter {
