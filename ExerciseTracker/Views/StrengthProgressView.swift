@@ -12,17 +12,14 @@ import Foundation
 
     /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
 struct StrengthProgressView: View {
-    var startDate: Date
-    var endDate: Date
-    
+    @Bindable var dateRangeService: DateRangeService
     @Query private var exercises: [StrengthExercise]
-    @State private var viewModel:  StrengthProgressViewModel
+    @State private var viewModel: StrengthProgressViewModel
     
-        // Custom initializer to set up the @State property correctly
-    init(startDate: Date, endDate: Date) {
-        self.startDate = startDate
-        self.endDate = endDate
-        _viewModel = State(initialValue: StrengthProgressViewModel(exercises: [], startDate: startDate, endDate: endDate))
+    init(dateRangeService: DateRangeService) {
+        self._dateRangeService = Bindable(dateRangeService)
+        
+        _viewModel = State(initialValue: StrengthProgressViewModel(exercises: [], dateRangeService: dateRangeService))
     }
     
     var body: some View {
@@ -64,13 +61,10 @@ struct StrengthProgressView: View {
         .cornerRadius(15)
         .shadow(radius: 5)
         .onAppear {
-            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+            viewModel.update(exercises: exercises)
         }
         .onChange(of: exercises) {
-            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
-        }
-        .onChange(of: [startDate, endDate]) {
-            viewModel.update(exercises: exercises, startDate: startDate, endDate: endDate)
+            viewModel.update(exercises: exercises)
         }
     }
 }

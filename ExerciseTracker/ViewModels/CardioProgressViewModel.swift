@@ -44,17 +44,19 @@ struct AggregatedCardioData: ProgressData {
     init(exercises: [CardioExercise], dateRangeService: DateRangeService) {
         self.allExercises = exercises
         self.dateRangeService = dateRangeService
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDateRangeUpdate), name: .didUpdateDateRange, object: nil)
+        
         aggregateData()
     }
     
-        // 5. ADD: Cleanup observer
+        // Cleanup observer
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-        // 6. ADD: Selector method called by NotificationCenter
+        // Selector method called by NotificationCenter. When DateRangeService changes dates, re-aggregate the data.
     @objc private func handleDateRangeUpdate() {
-            // When the service changes the dates, we simply re-aggregate the data.
         aggregateData()
     }
     
@@ -64,7 +66,6 @@ struct AggregatedCardioData: ProgressData {
             aggregateData()
         }
     }
-    
         /// Uses the DateProgressAggregator for temporal grouping and handles the data-specific aggregation.
     func aggregateData() {
         let currentStartDate = dateRangeService.startDate

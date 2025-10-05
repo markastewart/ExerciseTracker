@@ -11,8 +11,6 @@ import SwiftData
 import Foundation
 
 struct DashboardView: View {
-    @State private var startDate = Calendar.current.date(byAdding: .day, value: -6, to: Date.now)!
-    @State private var endDate = Date.now
     @State private var showDataSyncSheet = false
     @State private var dataRangeService = DateRangeService()
 
@@ -25,7 +23,7 @@ struct DashboardView: View {
                     
                     CardioProgressView(dateRangeService: dataRangeService)
                     
-                    StrengthProgressView(startDate: startDate, endDate: endDate)
+                    StrengthProgressView(dateRangeService: dataRangeService)
                     
                     LastExerciseAddedView()
                 }

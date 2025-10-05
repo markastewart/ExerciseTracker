@@ -16,6 +16,7 @@ struct CardioProgressView: View {
     
     init(dateRangeService: DateRangeService) {
         self._dateRangeService = Bindable(dateRangeService)
+        
         _viewModel = State(initialValue: CardioProgressViewModel(exercises: [], dateRangeService: dateRangeService))
     }
     

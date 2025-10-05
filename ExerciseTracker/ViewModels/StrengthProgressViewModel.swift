@@ -17,10 +17,8 @@ struct AggregatedStrengthData: ProgressData {
 
 @Observable class StrengthProgressViewModel {
     var aggregatedData: [AggregatedStrengthData] = []
-    
+    private let dateRangeService: DateRangeService
     private var allExercises: [StrengthExercise] = []
-    private(set) var startDate: Date
-    private(set) var endDate: Date
     
         /// Accessor for the dynamic aggregator instance (Non-generic class).
     private var aggregator: ExerciseProgressAggregator {
@@ -39,28 +37,40 @@ struct AggregatedStrengthData: ProgressData {
     
         /// Filters the exercises based on the current range (kept for simplicity and debugging).
     var filteredExercises: [StrengthExercise] {
-        return allExercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
+        return allExercises.filter { $0.exerciseDate >= dateRangeService.startDate.startOfDay && $0.exerciseDate <= dateRangeService.endDate.endOfDay }
     }
     
-    init(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
+    init(exercises: [StrengthExercise], dateRangeService: DateRangeService) {
         self.allExercises = exercises
-        self.startDate = startDate
-        self.endDate = endDate
+        self.dateRangeService = dateRangeService
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDateRangeUpdate), name: .didUpdateDateRange, object: nil)
+        
         aggregateData()
     }
     
-        // Re-aggregate if the raw data or range has actually changed.
-    func update(exercises: [StrengthExercise], startDate: Date, endDate: Date) {
-        if self.allExercises.count != exercises.count || self.startDate != startDate || self.endDate != endDate {
+        // Cleanup observer
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+        // Selector method called by NotificationCenter. When DateRangeService changes dates, re-aggregate the data.
+    @objc private func handleDateRangeUpdate() {
+        aggregateData()
+    }
+    
+        // Re-aggregate if the raw data has actually changed.
+    func update(exercises: [StrengthExercise]) {
+        if self.allExercises.count != exercises.count {
             self.allExercises = exercises
-            self.startDate = startDate
-            self.endDate = endDate
             aggregateData()
         }
     }
     
         /// Aggregates raw exercise data into dynamic buckets (Day, Week, Month, or Year).
     func aggregateData() {
+        let currentStartDate = dateRangeService.startDate
+        let currentEndDate = dateRangeService.endDate
         
             // Define the data-specific aggregation logic
         let dataAggregator: (Date, [StrengthExercise]) -> AggregatedStrengthData = { dateKey, exercisesForPeriod in
@@ -78,8 +88,8 @@ struct AggregatedStrengthData: ProgressData {
             // Perform the aggregation using the service
         aggregatedData = aggregator.aggregate(
             rawExercises: allExercises,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: currentStartDate,
+            endDate: currentEndDate,
             zeroData: zeroDataCreator,
             dataAggregator: dataAggregator
         )
