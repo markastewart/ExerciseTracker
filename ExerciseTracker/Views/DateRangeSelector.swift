@@ -52,14 +52,6 @@ struct DateRangeSelector: View {
     }
 }
 
-extension DateFormatter {
-    static let monthDayYear: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "MMM dd, yyyy" // e.g. Oct 05, 2025
-        return df
-    }()
-}
-
 #Preview {
 //    DateRangeSelector()
 }
