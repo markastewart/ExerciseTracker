@@ -109,10 +109,9 @@ class DateRangeService {
         
             // Use the absolute value of days in case the range was flipped
         let totalDays = abs(days)
-        
         if totalDays <= 10 {
             return .daily
-        } else if totalDays <= 45 {
+        } else if totalDays <= 70 {
             return .weekly
         } else if totalDays <= 455 {
             return .monthly
