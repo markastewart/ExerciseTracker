@@ -53,6 +53,18 @@ struct StrengthProgressView: View {
                         .foregroundStyle(by: .value("Metric", "Total Weight Lifted"))
                     }
                 }
+                    // Customize the X-Axis to use the ViewModel's dynamic formatter
+                .chartXAxis {
+                    AxisMarks(values: .automatic) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel {
+                            if let date = value.as(Date.self) {
+                                Text(viewModel.xAxisDateFormatter.string(from: date))
+                            }
+                        }
+                    }
+                }
                 .padding(.horizontal)
             }
         }

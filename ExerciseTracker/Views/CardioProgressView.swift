@@ -51,7 +51,7 @@ struct CardioProgressView: View {
                         .foregroundStyle(by: .value("Metric", "Calories"))
                     }
                 }
-                    // IMPORTANT: Customize the X-Axis to use the ViewModel's dynamic formatter
+                    // Customize the X-Axis to use the ViewModel's dynamic formatter
                 .chartXAxis {
                     AxisMarks(values: .automatic) { value in
                         AxisGridLine()
