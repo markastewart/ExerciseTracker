@@ -51,9 +51,9 @@ struct CardioProgressView: View {
                         .foregroundStyle(by: .value("Metric", "Calories"))
                     }
                 }
-                    // Customize the X-Axis to use the ViewModel's dynamic formatter
+                .frame(height: 100)
                 .chartXAxis {
-                    AxisMarks(values: .automatic) { value in
+                    AxisMarks(values: viewModel.xAxisLabelDates) { value in
                         AxisGridLine()
                         AxisTick()
                         AxisValueLabel {
@@ -63,7 +63,7 @@ struct CardioProgressView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
+                .padding([.horizontal, .bottom])
                 
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
@@ -74,8 +74,9 @@ struct CardioProgressView: View {
                         .foregroundStyle(by: .value("Metric", "Pace"))
                     }
                 }
+                .frame(height: 100)
                 .chartXAxis {
-                    AxisMarks(values: .automatic) { value in
+                    AxisMarks(values: viewModel.xAxisLabelDates) { value in
                         AxisGridLine()
                         AxisTick()
                         AxisValueLabel {
@@ -86,10 +87,9 @@ struct CardioProgressView: View {
                     }
                 }
                 .chartForegroundStyleScale(["Pace": .green])
-                .padding(.horizontal)
+                .padding([.horizontal, .bottom])
             }
         }
-        .frame(height: 200)
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)

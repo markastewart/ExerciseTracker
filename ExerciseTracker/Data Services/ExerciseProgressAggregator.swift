@@ -27,7 +27,7 @@ protocol ProgressData: Identifiable {
             case .weekly:
                 formatter.dateFormat = "MMM d" // Week start date, e.g., Jun 16
             case .monthly:
-                formatter.dateFormat = "MMM yyyy" // e.g., June 2024
+                formatter.dateFormat = "MMM yy" // e.g., June 2024
             case .yearly:
                 formatter.dateFormat = "yyyy" // e.g., 2024
         }
