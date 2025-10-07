@@ -50,7 +50,7 @@ protocol ProgressData: Identifiable {
             // Filter exercises within the date range
         let filteredExercises = rawExercises.filter { $0.exerciseDate >= startDate.startOfDay && $0.exerciseDate <= endDate.endOfDay }
         
-            // Group the filtered data based on the dynamic aggregation unit.
+            // Group the filtered data based on the aggregation period.
         print("aggregate: \(aggregationPeriod), start: \(DateFormatter.shortDate.string(from: startDate)), end: \(DateFormatter.shortDate.string(from: endDate))")
         let groupedData = Dictionary(grouping: filteredExercises) { exercise in
             switch aggregationPeriod {
