@@ -10,12 +10,12 @@ import Charts
 import SwiftData
 
 struct CardioProgressView: View {
-    @Bindable var dateRangeService: DateRangeService
+    @ObservedObject var dateRangeService: DateRangeService
     @Query private var exercises: [CardioExercise]
     @State private var viewModel: CardioProgressViewModel
     
     init(dateRangeService: DateRangeService) {
-        self._dateRangeService = Bindable(dateRangeService)
+        self._dateRangeService = ObservedObject(wrappedValue: dateRangeService)
         
         _viewModel = State(initialValue: CardioProgressViewModel(exercises: [], dateRangeService: dateRangeService))
     }

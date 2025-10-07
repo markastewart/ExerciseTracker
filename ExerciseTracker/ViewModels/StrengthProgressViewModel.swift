@@ -25,14 +25,9 @@ struct AggregatedStrengthData: ProgressData {
         return ExerciseProgressAggregator()
     }
     
-        /// Determines the appropriate aggregation unit based on the date range length.
-    var aggregationUnit: DateRangePeriod {
-        return aggregator.aggregationPeriod
-    }
-    
         /// Provides the correct formatter for the X-axis based on the current aggregation unit.
     var xAxisDateFormatter: DateFormatter {
-        return aggregator.xAxisDateFormatter
+        return aggregator.xAxisDateFormatter(aggregationPeriod: dateRangeService.aggregationPeriod)
     }
     
         /// Filters the exercises based on the current range (kept for simplicity and debugging).
@@ -71,6 +66,7 @@ struct AggregatedStrengthData: ProgressData {
     func aggregateData() {
         let currentStartDate = dateRangeService.startDate
         let currentEndDate = dateRangeService.endDate
+        let currentAggregationPeriod = dateRangeService.aggregationPeriod
         
             // Define the data-specific aggregation logic
         let dataAggregator: (Date, [StrengthExercise]) -> AggregatedStrengthData = { dateKey, exercisesForPeriod in
@@ -90,6 +86,7 @@ struct AggregatedStrengthData: ProgressData {
             rawExercises: allExercises,
             startDate: currentStartDate,
             endDate: currentEndDate,
+            aggregationPeriod: currentAggregationPeriod,
             zeroData: zeroDataCreator,
             dataAggregator: dataAggregator
         )

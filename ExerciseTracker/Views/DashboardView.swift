@@ -12,13 +12,13 @@ import Foundation
 
 struct DashboardView: View {
     @State private var showDataSyncSheet = false
-    @State private var dataRangeService = DateRangeService()
+    @StateObject private var dataRangeService = DateRangeService()
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 15) {
-                    DateRangeSelector(dateRangeService: $dataRangeService)
+                    DateRangeSelector(dateRangeService: dataRangeService)
                         .padding(.leading, 7)
                     
                     CardioProgressView(dateRangeService: dataRangeService)

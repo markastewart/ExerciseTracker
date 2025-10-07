@@ -12,12 +12,12 @@ import Foundation
 
     /// The view model handles data aggregation. Initialized once, and updated via the .onChange observer.
 struct StrengthProgressView: View {
-    @Bindable var dateRangeService: DateRangeService
+    @ObservedObject var dateRangeService: DateRangeService
     @Query private var exercises: [StrengthExercise]
     @State private var viewModel: StrengthProgressViewModel
     
     init(dateRangeService: DateRangeService) {
-        self._dateRangeService = Bindable(dateRangeService)
+        self._dateRangeService = ObservedObject(wrappedValue: dateRangeService)
         
         _viewModel = State(initialValue: StrengthProgressViewModel(exercises: [], dateRangeService: dateRangeService))
     }

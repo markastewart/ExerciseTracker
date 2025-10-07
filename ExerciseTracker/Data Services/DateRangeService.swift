@@ -31,16 +31,17 @@ enum TimePeriod: String, CaseIterable, Identifiable {
     }
 }
 
-@Observable
-class DateRangeService {
-    
-        // The view will bind to this property directly.
-    var selectedPeriod: TimePeriod = .last7Days {
+class DateRangeService: ObservableObject {
+    @Published var selectedPeriod: TimePeriod = .last7Days {
         didSet { updateDateRange() }
     }
     
         // The DateRangeSelector view binds to these properties directly when .custom selected. Recalc range when currently in custom mode. NotificationCenter ensures observers update.
-    var customStartDate: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+    var customStartDate: Date = Calendar.current.date(byAdding: .day, value: -365, to: Date())!  {
+        didSet { if selectedPeriod == .custom { updateDateRange() }
+        }
+    }
+
     var customEndDate: Date = Date.now {
         didSet { if selectedPeriod == .custom { updateDateRange() }
         }
@@ -120,16 +121,14 @@ class DateRangeService {
         }
     }
     
-    // Primarily used for initialization or external setting, but direct binding is often preferred for SwiftUI DatePickers.
+        // Reset start and end date when custom start or end dates changed
     func setCustomDateRange(start: Date, end: Date) {
         self.customStartDate = start
         self.customEndDate = end
         
-            // If period already custom, didSet of customEndDate will call updateDateRange(). If period wasn't custom, setting selectedPeriod will call it.
+            // If period wasn't custom, setting selectedPeriod will call it.
         if selectedPeriod != .custom {
              selectedPeriod = .custom
-            
-                // Call update if only start date changes while in custom mode
         } else {
             updateDateRange()
         }

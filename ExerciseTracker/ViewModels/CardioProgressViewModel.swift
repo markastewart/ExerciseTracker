@@ -28,12 +28,7 @@ struct AggregatedCardioData: ProgressData {
     
         /// Accesses the aggregator's formatter for chart X-axis labeling.
     var xAxisDateFormatter: DateFormatter {
-        return aggregator.xAxisDateFormatter
-    }
-    
-        /// Accesses the aggregator's unit for view logic (if needed).
-    var aggregationUnit: DateRangePeriod {
-        return aggregator.aggregationPeriod
+        return aggregator.xAxisDateFormatter(aggregationPeriod: dateRangeService.aggregationPeriod)
     }
     
         /// Filters the exercises based on the current range.
@@ -70,6 +65,7 @@ struct AggregatedCardioData: ProgressData {
     func aggregateData() {
         let currentStartDate = dateRangeService.startDate
         let currentEndDate = dateRangeService.endDate
+        let currentAggregationPeriod = dateRangeService.aggregationPeriod
         
             // Define the data-specific aggregation logic
         let dataAggregator: (Date, [CardioExercise]) -> AggregatedCardioData = { dateKey, exercisesForPeriod in
@@ -102,6 +98,7 @@ struct AggregatedCardioData: ProgressData {
             rawExercises: allExercises,
             startDate: currentStartDate,
             endDate: currentEndDate,
+            aggregationPeriod: currentAggregationPeriod,
             zeroData: zeroDataCreator,
             dataAggregator: dataAggregator
         )
