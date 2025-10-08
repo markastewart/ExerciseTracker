@@ -20,10 +20,18 @@ struct AggregatedCardioData: ProgressData {
     var aggregatedData: [AggregatedCardioData] = []
     private let dateRangeService: DateRangeService
     private var allExercises: [CardioExercise] = []
+    private let axisConfig = ProgressViewAxisConfig()
     
         /// Accessor for the dynamic aggregator instance (Non-generic class).
     private var aggregator: ExerciseProgressAggregator {
         return ExerciseProgressAggregator()
+    }
+    
+        /// Provides the explicit end date for the chart's X-axis domain to prevent the last label from clipping.
+    var xAxisDomainEnd: Date? {
+        return axisConfig.xAxisDomainEnd(aggregatedData: aggregatedData,
+            selectedDateRange: dateRangeService.aggregationPeriod
+        )
     }
     
         /// Accesses the aggregator's formatter for chart X-axis labeling.
@@ -31,55 +39,12 @@ struct AggregatedCardioData: ProgressData {
         return aggregator.xAxisDateFormatter(aggregationPeriod: dateRangeService.aggregationPeriod)
     }
     
-    var xAxisStrideUnit: Calendar.Component {
-        let currentAggregationPeriod = dateRangeService.aggregationPeriod
-        switch currentAggregationPeriod {
-            case .daily: return .day
-            case .weekly: return .weekOfYear
-            case .monthly: return .month
-            case .yearly: return .year
-        }
-    }
-    
-    var xAxisStrideCount: Int {
-        let currentAggregationPeriod = dateRangeService.aggregationPeriod
-        if currentAggregationPeriod == .monthly {
-                // For monthly views (like 12 months), step by 3 to only label every quarter (Jan, Apr, Jul, Oct)
-            return 3
-        }
-            // For all other periods (daily, weekly, yearly), show every 1st unit.
-        return 1
-    }
-    
-        // This ensures the first date, stride dates, AND the last date are included.
+        /// Provides the explicit dates to mark on the X-axis.
     var xAxisLabelDates: [Date] {
-        guard !aggregatedData.isEmpty,
-              let firstDate = aggregatedData.first?.aggregationStartDate,
-              let lastDate = aggregatedData.last?.aggregationStartDate
-        else {
-            return []
-        }
-        
-        let calendar = Calendar.current
-        let unit = xAxisStrideUnit
-        let count = xAxisStrideCount
-        
-        var dates: Set<Date> = []
-        var currentDate = firstDate
-        
-            // 1. Generate dates based on the calculated stride
-        while currentDate <= lastDate {
-            dates.insert(currentDate)
-            guard let nextDate = calendar.date(byAdding: unit, value: count, to: currentDate) else { break }
-            currentDate = nextDate
-        }
-        
-            // 2. CRITICAL STEP: Manually insert the last date from the data set.
-            // This guarantees the far-right label is always included.
-        dates.insert(lastDate)
-        
-            // 3. Convert Set back to a sorted Array for the Chart.
-        return Array(dates).sorted()
+        return axisConfig.xAxisLabelDates(
+            aggregatedData: aggregatedData,
+            selectedDateRange: dateRangeService.aggregationPeriod
+        )
     }
     
         /// Filters the exercises based on the current range.
@@ -107,8 +72,8 @@ struct AggregatedCardioData: ProgressData {
     }
     
     func update(exercises: [CardioExercise]) {
-        if self.allExercises.count != exercises.count {
-            self.allExercises = exercises
+        if allExercises.count != exercises.count {
+            allExercises = exercises
             aggregateData()
         }
     }
