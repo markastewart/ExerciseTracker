@@ -44,6 +44,9 @@ struct StrengthProgressView: View {
                 Text("No data for this date range.")
                     .padding()
             } else {
+                let domainStart = viewModel.aggregatedData.first?.aggregationStartDate ?? Date()
+                let domainEnd = viewModel.xAxisDomainEnd ?? domainStart
+                
                 Chart {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
@@ -54,8 +57,9 @@ struct StrengthProgressView: View {
                     }
                 }
                     // Customize the X-Axis to use the ViewModel's dynamic formatter
+                .chartXScale(domain: [domainStart, domainEnd])
                 .chartXAxis {
-                    AxisMarks(values: .automatic) { value in
+                    AxisMarks(values: viewModel.xAxisLabelDates) { value in
                         AxisGridLine()
                         AxisTick()
                         AxisValueLabel {

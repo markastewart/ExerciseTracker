@@ -19,15 +19,31 @@ struct AggregatedStrengthData: ProgressData {
     var aggregatedData: [AggregatedStrengthData] = []
     private let dateRangeService: DateRangeService
     private var allExercises: [StrengthExercise] = []
+    private let axisConfig = ProgressViewAxisConfig()
     
         /// Accessor for the dynamic aggregator instance (Non-generic class).
     private var aggregator: ExerciseProgressAggregator {
         return ExerciseProgressAggregator()
     }
     
-        /// Provides the correct formatter for the X-axis based on the current aggregation unit.
+        /// Provides the explicit end date for the chart's X-axis domain to prevent the last label from clipping.
+    var xAxisDomainEnd: Date? {
+        return axisConfig.xAxisDomainEnd(aggregatedData: aggregatedData,
+            selectedDateRange: dateRangeService.aggregationPeriod
+        )
+    }
+    
+        /// Accesses the aggregator's formatter for chart X-axis labeling.
     var xAxisDateFormatter: DateFormatter {
         return aggregator.xAxisDateFormatter(aggregationPeriod: dateRangeService.aggregationPeriod)
+    }
+    
+        /// Provides the explicit dates to mark on the X-axis.
+    var xAxisLabelDates: [Date] {
+        return axisConfig.xAxisLabelDates(
+            aggregatedData: aggregatedData,
+            selectedDateRange: dateRangeService.aggregationPeriod
+        )
     }
     
         /// Filters the exercises based on the current range (kept for simplicity and debugging).
