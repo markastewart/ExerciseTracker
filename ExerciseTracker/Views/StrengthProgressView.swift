@@ -51,9 +51,9 @@ struct StrengthProgressView: View {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
                             x: .value("Date", dayData.aggregationStartDate),
-                            y: .value("Total Weight Lifted", dayData.totalWeightLifted)
+                            y: .value("Average Weight Lifted", dayData.averageWeightLifted)
                         )
-                        .foregroundStyle(by: .value("Metric", "Total Weight Lifted"))
+                        .foregroundStyle(by: .value("Metric", "Average Weight Lifted"))
                     }
                 }
                     // Customize the X-Axis to use the ViewModel's dynamic formatter

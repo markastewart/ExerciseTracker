@@ -12,7 +12,7 @@ import SwiftData
 struct AggregatedStrengthData: ProgressData {
     let id = UUID()
     let aggregationStartDate: Date
-    let totalWeightLifted: Int
+    let averageWeightLifted: Int
 }
 
 @Observable class StrengthProgressViewModel {
@@ -90,12 +90,14 @@ struct AggregatedStrengthData: ProgressData {
                 // Strength Aggregation Calculation: Total Weight Lifted = Sum of (Weight * Sets * Reps)
             let totalWeightLifted = exercisesForPeriod.reduce(0) {
                     $0 + ($1.weight * $1.sets * $1.reps) }
+            let totalStrengthExercises = exercisesForPeriod.count
+            let averageWeightLifted = totalStrengthExercises > 0 ? (totalWeightLifted / Int(totalStrengthExercises)) : 0
             
-            return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: totalWeightLifted)
+            return AggregatedStrengthData(aggregationStartDate: dateKey, averageWeightLifted: averageWeightLifted)
         }
             // Define the zero-padding data creator
         let zeroDataCreator: (Date) -> AggregatedStrengthData = { dateKey in
-            return AggregatedStrengthData(aggregationStartDate: dateKey, totalWeightLifted: 0)
+            return AggregatedStrengthData(aggregationStartDate: dateKey, averageWeightLifted: 0)
         }
             // Perform the aggregation using the service
         aggregatedData = aggregator.aggregate(
