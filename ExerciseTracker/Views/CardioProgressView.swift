@@ -49,9 +49,9 @@ struct CardioProgressView: View {
                     ForEach(viewModel.aggregatedData) { dayData in
                         LineMark(
                             x: .value("Date", dayData.aggregationStartDate),
-                            y: .value("Calories", dayData.totalCalories)
+                            y: .value("Average Calories", dayData.averageCalories)
                         )
-                        .foregroundStyle(by: .value("Metric", "Calories"))
+                        .foregroundStyle(by: .value("Metric", "Average Calories"))
                     }
                 }
                 .frame(height: 100)

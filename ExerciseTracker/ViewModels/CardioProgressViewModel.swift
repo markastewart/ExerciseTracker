@@ -12,7 +12,7 @@ struct AggregatedCardioData: ProgressData {
     let id = UUID()
     let aggregationStartDate: Date
     let totalDistance: Double
-    let totalCalories: Int
+    let averageCalories: Int
     let averagePace: Double
 }
 
@@ -89,14 +89,16 @@ struct AggregatedCardioData: ProgressData {
             let totalDistance = exercisesForPeriod.reduce(0.0) { $0 + $1.distance }
             let totalCalories = exercisesForPeriod.reduce(0) { $0 + $1.calories }
             let totalDuration = exercisesForPeriod.reduce(0.0) { $0 + $1.duration }
+            let totalCardioExercises = exercisesForPeriod.count
             
-                // Calculate average pace
+                // Calculate average pace and average calories
             let averagePace = totalDuration > 0 ? (totalDistance / totalDuration) * 60 : 0.0
+            let averageCalories = totalCardioExercises > 0 ? (totalCalories / Int(totalCardioExercises)) : 0
             
             return AggregatedCardioData(
                 aggregationStartDate: dateKey,
                 totalDistance: totalDistance,
-                totalCalories: totalCalories,
+                averageCalories: averageCalories,
                 averagePace: averagePace
             )
         }
@@ -105,7 +107,7 @@ struct AggregatedCardioData: ProgressData {
             return AggregatedCardioData(
                 aggregationStartDate: dateKey,
                 totalDistance: 0.0,
-                totalCalories: 0,
+                averageCalories: 0,
                 averagePace: 0.0
             )
         }
