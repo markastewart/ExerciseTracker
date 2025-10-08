@@ -67,6 +67,9 @@ struct CardioProgressView: View {
                         }
                     }
                 }
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
                 .padding([.horizontal, .bottom])
                 
                 Chart {
@@ -92,6 +95,9 @@ struct CardioProgressView: View {
                     }
                 }
                 .chartForegroundStyleScale(["Pace": .green])
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
                 .padding([.horizontal, .bottom])
             }
         }

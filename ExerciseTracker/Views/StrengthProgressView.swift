@@ -69,6 +69,9 @@ struct StrengthProgressView: View {
                         }
                     }
                 }
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
                 .padding(.horizontal)
             }
         }
