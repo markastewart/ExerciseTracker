@@ -96,7 +96,7 @@ class DateRangeService: ObservableObject {
             aggregationPeriod = determineCustomPeriod(start: startDate, end: endDate)
         }
             // Trigger aggregation in consumers (ViewModels) after dates are finalized
-        NotificationCenter.default.post(name: .didUpdateDateRange, object: nil)
+        NotificationCenter.default.post(name: .didUpdateExerciseData, object: nil)
     }
     
         // Implements the logic to determine the cadence for the custom date range.
@@ -133,9 +133,4 @@ class DateRangeService: ObservableObject {
             updateDateRange()
         }
     }
-}
-
-    // Global Notification for Aggregation Refresh
-extension Notification.Name {
-    static let didUpdateDateRange = Notification.Name("didUpdateDateRange")
 }

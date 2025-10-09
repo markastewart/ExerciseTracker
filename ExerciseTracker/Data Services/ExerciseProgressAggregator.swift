@@ -109,3 +109,8 @@ protocol ProgressData: Identifiable {
         .sorted { $0.aggregationStartDate < $1.aggregationStartDate }
     }
 }
+
+    // Global Notification for Aggregation Refresh
+extension Notification.Name {
+    static let didUpdateExerciseData = Notification.Name("didUpdateExerciseData")
+}

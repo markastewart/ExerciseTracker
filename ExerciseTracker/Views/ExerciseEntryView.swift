@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ExerciseEntryView: View {
     @Environment(\.dismiss) var dismiss
     @State private var viewModel: ExerciseEntryViewModel

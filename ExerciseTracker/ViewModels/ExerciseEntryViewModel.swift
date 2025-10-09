@@ -144,6 +144,9 @@ import SwiftData
                     dataService.save(exerciseToSave)
                 }
         }
+        
+            // Notify any listeners that exercise data was updated.
+        NotificationCenter.default.post(name: .didUpdateExerciseData, object: nil)
     }
     
         /// Deletes the currently editing exercise.

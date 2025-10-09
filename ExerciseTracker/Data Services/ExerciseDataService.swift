@@ -92,7 +92,7 @@ class ExerciseDataService {
     }
     
     func delete<T: PersistentModel>(_ model: T) {
-        guard let context = modelContext else {
+        guard let _ = modelContext else {
             fatalError("ModelContext not set.")
         }
         
