@@ -50,7 +50,8 @@ class DataSyncService {
             
             for exercise in allStrength {
                 let formattedExerciseDate = DateFormatter.shortDate.string(from: exercise.exerciseDate)
-                let line = "\(formattedExerciseDate),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight), \(exercise.recordedDate)\n"
+                let formattedRecordedDate = DateFormatter.shortDate.string(from: exercise.recordedDate)
+                let line = "\(formattedExerciseDate),\(exercise.exerciseType),\(exercise.sets),\(exercise.reps), \(exercise.weight), \(formattedRecordedDate)\n"
                 exportString += line
             }
         } catch {
@@ -145,6 +146,20 @@ class DataSyncService {
             } catch {
                 fatalError("Failed to save imported data: \(error)")
             }
+        }
+    }
+    
+        /// Deletes all existing CardioExercise and StrengthExercise records from the ModelContext.
+    func clearAllData() {
+        do {
+                // Delete all CardioExercise and StrengthExercise records
+            try modelContext.delete(model: CardioExercise.self)
+            try modelContext.delete(model: StrengthExercise.self)
+            
+                // Saving the context is automatically done by the delete(model:) method in recent SwiftData versions, but explicitly saving after a massive operation ensures immediate persistence.
+            try modelContext.save()
+        } catch {
+            fatalError("Failed to clear existing data: \(error)")
         }
     }
     
