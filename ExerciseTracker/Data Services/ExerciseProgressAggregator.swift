@@ -18,22 +18,6 @@ protocol ProgressData: Identifiable {
 @Observable class ExerciseProgressAggregator {
     private let calendar = Calendar.current
     
-        /// Provides the correct formatter for the X-axis based on the current aggregation unit.
-    func xAxisDateFormatter (aggregationPeriod: DateRangePeriod) -> DateFormatter {
-        let formatter = DateFormatter()
-        switch aggregationPeriod {
-            case .daily:
-                formatter.dateFormat = "MMM d" // e.g., Jun 15
-            case .weekly:
-                formatter.dateFormat = "MMM d" // Week start date, e.g., Jun 16
-            case .monthly:
-                formatter.dateFormat = "MMM yy" // e.g., June 2024
-            case .yearly:
-                formatter.dateFormat = "yyyy" // e.g., 2024
-        }
-        return formatter
-    }
-    
         /// Groups raw exercises by the calculated aggregation period and pads the range with zero entries.
         ///
         /// - Parameters:

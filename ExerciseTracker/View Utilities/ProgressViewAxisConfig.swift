@@ -37,9 +37,9 @@ struct ProgressViewAxisConfig {
         let formatter = DateFormatter()
         switch selectedDateRange {
             case .daily, .weekly:
-                formatter.dateFormat = "MMM d" // e.g., Jun 15
+                formatter.dateFormat = "MM/dd" // e.g., Jun 15
             case .monthly:
-                formatter.dateFormat = "MMM yy" // e.g., Jan '24, Apr '24, etc.
+                formatter.dateFormat = "MM/yy" // e.g., Jan '24, Apr '24, etc.
             case .yearly:
                 formatter.dateFormat = "yyyy" // e.g., 2024
         }

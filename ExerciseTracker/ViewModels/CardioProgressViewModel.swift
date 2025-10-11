@@ -36,7 +36,7 @@ struct AggregatedCardioData: ProgressData {
     
         /// Accesses the aggregator's formatter for chart X-axis labeling.
     var xAxisDateFormatter: DateFormatter {
-        return aggregator.xAxisDateFormatter(aggregationPeriod: dateRangeService.aggregationPeriod)
+        return axisConfig.xAxisDateFormatter(selectedDateRange: dateRangeService.aggregationPeriod)
     }
     
         /// Provides the explicit dates to mark on the X-axis.

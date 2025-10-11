@@ -63,12 +63,16 @@ struct CardioProgressView: View {
                         AxisValueLabel {
                             if let date = value.as(Date.self) {
                                 Text(viewModel.xAxisDateFormatter.string(from: date))
+                                    .font(.caption2.bold())
                             }
                         }
                     }
                 }
                 .chartYAxis {
-                    AxisMarks(position: .leading)
+                    AxisMarks(position: .leading) { value in
+                        AxisValueLabel()
+                            .font(.caption2.bold())
+                    }
                 }
                 .padding([.horizontal, .bottom])
                 
@@ -90,13 +94,17 @@ struct CardioProgressView: View {
                         AxisValueLabel {
                             if let date = value.as(Date.self) {
                                 Text(viewModel.xAxisDateFormatter.string(from: date))
+                                    .font(.caption2.bold())
                             }
                         }
                     }
                 }
                 .chartForegroundStyleScale(["Pace": .green])
                 .chartYAxis {
-                    AxisMarks(position: .leading)
+                    AxisMarks(position: .leading) { value in
+                        AxisValueLabel()
+                            .font(.caption2.bold())
+                    }
                 }
                 .padding([.horizontal, .bottom])
             }
