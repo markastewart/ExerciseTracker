@@ -36,7 +36,7 @@ import SwiftData
     
     private let dataService = ExerciseDataService.shared
     private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]
-    private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Chest Fly", "Inner Thigh Abductor", "Lateral Pull", "Lateral Raise", "Leg Curl", "Leg Extensions", "Seated Calf Raise", "Shoulder Press", "Tricep Extension"]
+    private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Chest Fly", "Inner Thigh Abductor", "Lat Pull", "Lat Raise", "Leg Curl", "Leg Extension", "Leg Press", "Rear Delt", "Seated Calf Raise", "Seated Row", "Shoulder Press", "Tricep Extension"]
     
         /// Initializes the ViewModel for a new entry or editing an existing one.
     init(exerciseMode: ExerciseType, editingCardio: CardioExercise? = nil, editingStrength: StrengthExercise? = nil) {
