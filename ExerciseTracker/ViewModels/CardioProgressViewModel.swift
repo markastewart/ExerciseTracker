@@ -87,7 +87,7 @@ struct AggregatedCardioData: ProgressData {
             let totalCardioExercises = exercisesForPeriod.count
             
                 // Calculate average pace and average calories
-            let averagePace = totalDuration > 0 ? (totalDistance / totalDuration) * 60 : 0.0
+            let averagePace = totalDuration > 0 ? calculatePace(totalDistance: totalDistance, totalDuration: totalDuration) : 0.0
             let averageCalories = totalCardioExercises > 0 ? (totalCalories / Int(totalCardioExercises)) : 0
             
             return AggregatedCardioData(
@@ -116,4 +116,8 @@ struct AggregatedCardioData: ProgressData {
             dataAggregator: dataAggregator
         )
     }
+}
+
+func calculatePace (totalDistance: Double, totalDuration: Double) -> Double {
+     return (totalDistance / totalDuration) * 60
 }

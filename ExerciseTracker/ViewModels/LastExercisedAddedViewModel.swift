@@ -11,37 +11,28 @@ import Combine
 
 @Observable class LastExerciseAddedViewModel {
     var lastExercise: AnyExercise? = nil
-    private let dataService = ExerciseDataService.shared
+    var pace: Double = 0.0
+    var totalWeight: Int = 0
 
-    init() {
-        refreshLastExercise()
-    }
-
-    func refreshLastExercise() {
-            // Fetch newest Cardio
-        if let modelContext = dataService.modelContext {
-            
-            let latestCardio = try? modelContext.fetch (
-                FetchDescriptor<CardioExercise>( sortBy: [SortDescriptor(\.recordedDate, order: .reverse)])
-            ).first
-            
-            let latestStrength = try? modelContext.fetch(
-                FetchDescriptor<StrengthExercise>(sortBy: [SortDescriptor(\.recordedDate, order: .reverse)])
-            ).first
-            
-            switch (latestCardio, latestStrength) {
-                case let (cardio?, strength?):
-                    lastExercise = cardio.recordedDate >= strength.recordedDate ? .cardio(cardio) : .strength(strength)
-                case let (cardio?, nil):
-                    lastExercise = .cardio(cardio)
-                case let (nil, strength?):
-                    lastExercise = .strength(strength)
-                default:
-                    lastExercise = nil
-            }
-        }
-        else {
-            fatalError("Error: Unable to obtain modelContext")
+    func refreshLastExercise(allCardio: [CardioExercise], allStrength: [StrengthExercise]) {
+        
+            // Use the first (latest) item from the live, sorted @Query arrays
+        let latestCardio = allCardio.first
+        let latestStrength = allStrength.first
+        
+        switch (latestCardio, latestStrength) {
+            case let (cardio?, strength?):
+                lastExercise = cardio.recordedDate >= strength.recordedDate ? .cardio(cardio) : .strength(strength)
+                pace = calculatePace(totalDistance: cardio.distance, totalDuration: cardio.duration)
+                totalWeight = calculateWeightLifted(weight: strength.weight, sets: strength.sets, reps: strength.reps)
+            case let (cardio?, nil):
+                lastExercise = .cardio(cardio)
+                pace = calculatePace(totalDistance: cardio.distance, totalDuration: cardio.duration)
+            case let (nil, strength?):
+                lastExercise = .strength(strength)
+                totalWeight = calculateWeightLifted(weight: strength.weight, sets: strength.sets, reps: strength.reps)
+            default:
+                lastExercise = nil
         }
     }
 }

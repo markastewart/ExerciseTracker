@@ -10,8 +10,10 @@ import SwiftData
 
 struct LastExerciseAddedView: View {
     @State private var viewModel = LastExerciseAddedViewModel()
-    @Query private var allStrength: [StrengthExercise]
-    @Query private var allCardio: [CardioExercise]
+    @Query(sort: [SortDescriptor<StrengthExercise>(\.recordedDate, order: .reverse)])
+    private var allStrength: [StrengthExercise]
+    @Query(sort: [SortDescriptor<CardioExercise>(\.recordedDate, order: .reverse)])
+    private var allCardio: [CardioExercise]
     
     var body: some View {
         Group {
@@ -38,6 +40,7 @@ struct LastExerciseAddedView: View {
                                 HStack {
                                     Text("Duration: \(Int(cardio.duration)) min")
                                     Text("Distance: \(cardio.distance, specifier: "%.2f") mi")
+                                    Text("Pace: \(viewModel.pace, specifier: "%.2f") mi/hr")
                                     Spacer()
                                 }
                                 
@@ -49,6 +52,7 @@ struct LastExerciseAddedView: View {
                             }
                             .padding(.leading, 5)
                         }
+                        .font(.caption)
                         .buttonStyle(PlainButtonStyle())
                         .foregroundColor(.primary)
                     }
@@ -77,9 +81,11 @@ struct LastExerciseAddedView: View {
                                     Text("Weight: \(strength.weight) lbs")
                                     Spacer()
                                 }
+                                Text("Total Weight: \(viewModel.totalWeight) lbs")
                             }
                             .padding(.leading, 5)
                         }
+                        .font(.caption)
                         .buttonStyle(PlainButtonStyle())
                         .foregroundColor(.primary)
                     }
@@ -93,8 +99,15 @@ struct LastExerciseAddedView: View {
         .background(Color(.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .onChange(of: allCardio.count + allStrength.count) {
-            viewModel.refreshLastExercise()
+        .onAppear {
+            viewModel.refreshLastExercise(allCardio: allCardio, allStrength: allStrength)
+        }
+            // Data change trigger (Edit, Add, Delete). Watch live arrays - when an object property changes, this triggers.
+        .onChange(of: allCardio) { oldCardio, newCardio in
+            viewModel.refreshLastExercise(allCardio: newCardio, allStrength: allStrength)
+        }
+        .onChange(of: allStrength) { oldStrength, newStrength in
+            viewModel.refreshLastExercise(allCardio: allCardio, allStrength: newStrength)
         }
     }
     

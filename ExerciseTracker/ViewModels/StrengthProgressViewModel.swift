@@ -83,8 +83,8 @@ struct AggregatedStrengthData: ProgressData {
         let dataAggregator: (Date, [StrengthExercise]) -> AggregatedStrengthData = { dateKey, exercisesForPeriod in
             
                 // Strength Aggregation Calculation: Total Weight Lifted = Sum of (Weight * Sets * Reps)
-            let totalWeightLifted = exercisesForPeriod.reduce(0) {
-                    $0 + ($1.weight * $1.sets * $1.reps) }
+            let totalWeightLifted = exercisesForPeriod.reduce(0) {$0 +
+                calculateWeightLifted (weight: $1.weight, sets: $1.sets, reps: $1.reps)}
             let totalStrengthExercises = exercisesForPeriod.count
             let averageWeightLifted = totalStrengthExercises > 0 ? (totalWeightLifted / Int(totalStrengthExercises)) : 0
             
@@ -104,4 +104,8 @@ struct AggregatedStrengthData: ProgressData {
             dataAggregator: dataAggregator
         )
     }
+}
+
+func calculateWeightLifted (weight: Int, sets: Int, reps: Int ) -> Int {
+    return weight * sets * reps
 }
