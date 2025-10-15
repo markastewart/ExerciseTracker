@@ -134,7 +134,7 @@ struct StrengthDetailsSection: View {
         HStack {
             Text("Weight (lb)")
             Spacer()
-            TextField("0", value: $viewModel.weight, formatter: NumberFormatter.decimal(1))
+            TextField("0", value: $viewModel.weight, formatter: NumberFormatter.inputDecimal(maxDigits: 1))
                 .keyboardType(.decimalPad)
         }
     }

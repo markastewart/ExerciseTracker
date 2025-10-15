@@ -109,7 +109,7 @@ import SwiftData
                         // If no entry found, set default Strength values
                     sets = 3
                     reps = 12
-                    weight = 0
+                    weight = 0.0
                 }
         }
     }
