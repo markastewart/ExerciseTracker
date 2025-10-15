@@ -25,7 +25,7 @@ import SwiftData
         // MARK: - Strength Properties
     var sets: Int = 3
     var reps: Int = 12
-    var weight: Int = 0
+    var weight: Double = 0.0
     
         // MARK: - Data and State
     var allTypes: [String] = [] // Contains either cardioTypes or strengthTypes based on 'mode'

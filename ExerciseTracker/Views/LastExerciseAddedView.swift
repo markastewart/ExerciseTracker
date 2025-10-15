@@ -78,10 +78,10 @@ struct LastExerciseAddedView: View {
                                 HStack {
                                     Text("Sets: \(strength.sets)")
                                     Text("Reps: \(strength.reps)")
-                                    Text("Weight: \(strength.weight) lbs")
+                                    Text("Weight: \(strength.weight, specifier: "%.1f") lbs")
                                     Spacer()
                                 }
-                                Text("Total Weight: \(viewModel.totalWeight) lbs")
+                                Text("Total Weight: \(viewModel.totalWeight, specifier: "%.1f") lbs")
                             }
                             .padding(.leading, 5)
                         }

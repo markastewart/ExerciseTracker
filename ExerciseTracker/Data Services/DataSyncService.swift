@@ -120,7 +120,7 @@ class DataSyncService {
                    !exerciseType.isEmpty,
                    let sets = Int(components[StrengthExercise.columnIndex.sets].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let reps = Int(components[StrengthExercise.columnIndex.reps].trimmingCharacters(in: .whitespacesAndNewlines)),
-                   let weight = Int(components[StrengthExercise.columnIndex.weight].trimmingCharacters(in: .whitespacesAndNewlines)),
+                   let weight = Double(components[StrengthExercise.columnIndex.weight].trimmingCharacters(in: .whitespacesAndNewlines)),
                    let recordedDate = DateFormatter.shortDate.date(from: components[StrengthExercise.columnIndex.recordedDate])
                 {
                     let newStrength = StrengthExercise()

@@ -12,7 +12,7 @@ import SwiftData
 struct AggregatedStrengthData: ProgressData {
     let id = UUID()
     let aggregationStartDate: Date
-    let averageWeightLifted: Int
+    let averageWeightLifted: Double
 }
 
 @Observable class StrengthProgressViewModel {
@@ -86,7 +86,7 @@ struct AggregatedStrengthData: ProgressData {
             let totalWeightLifted = exercisesForPeriod.reduce(0) {$0 +
                 calculateWeightLifted (weight: $1.weight, sets: $1.sets, reps: $1.reps)}
             let totalStrengthExercises = exercisesForPeriod.count
-            let averageWeightLifted = totalStrengthExercises > 0 ? (totalWeightLifted / Int(totalStrengthExercises)) : 0
+            let averageWeightLifted = totalStrengthExercises > 0 ? (totalWeightLifted / Double (totalStrengthExercises)) : 0
             
             return AggregatedStrengthData(aggregationStartDate: dateKey, averageWeightLifted: averageWeightLifted)
         }
@@ -106,6 +106,6 @@ struct AggregatedStrengthData: ProgressData {
     }
 }
 
-func calculateWeightLifted (weight: Int, sets: Int, reps: Int ) -> Int {
-    return weight * sets * reps
+func calculateWeightLifted (weight: Double, sets: Int, reps: Int ) -> Double {
+    return weight * Double (sets * reps)
 }

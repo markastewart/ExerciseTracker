@@ -12,7 +12,7 @@ import Combine
 @Observable class LastExerciseAddedViewModel {
     var lastExercise: AnyExercise? = nil
     var pace: Double = 0.0
-    var totalWeight: Int = 0
+    var totalWeight: Double = 0.0
 
     func refreshLastExercise(allCardio: [CardioExercise], allStrength: [StrengthExercise]) {
         
