@@ -52,9 +52,11 @@ struct ExerciseEntryView: View {
             Section("Historical Data") {
                 if viewModel.mode == .cardio {
                     CardioHistoricalSection(viewModel: viewModel)
+                        .foregroundStyle(.secondary)
                 }
                 else {
                     StrengthHistoricalSection(viewModel: viewModel)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -158,7 +160,6 @@ struct CardioHistoricalSection: View {
             }
         }
         .font(.subheadline)
-        .foregroundColor(.primary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(.systemBackground))
@@ -216,7 +217,6 @@ struct StrengthHistoricalSection: View {
             }
         }
         .font(.subheadline)
-        .foregroundColor(.primary)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(.systemBackground))
