@@ -84,6 +84,21 @@ import SwiftData
             exerciseType = allTypes.first ?? ""
             loadLastEntry()
         }
+        
+        if exerciseMode == .cardio {
+                // Retrieve average and personal best values for the exercise selected.
+            let cardioStats = CardioStats(exerciseType: exerciseType)
+            averagePace = cardioStats.averagePace
+            averageCalories = cardioStats.averageCalories
+            personalBestPace = cardioStats.personalBestPace
+            personalBestCalories = cardioStats.personalBestCalories
+        }
+            // Retrieve average and personal best values for the exercise selected.
+        else {
+            let strengthStats = StrengthStats(exerciseType: exerciseType)
+            averageTotalWeight = strengthStats.averageTotalWeight
+            personalBestTotalWeight = strengthStats.personalBestTotalWeight
+        }
     }
     
         /// Loads the values from the most recent entry matching the current exercise mode and exerciseType.
@@ -108,12 +123,6 @@ import SwiftData
                     calories = 0
                     incline = 0.0
                 }
-                    // Retrieve average and personal best values for the exercise selected.
-                let cardioStats = CardioStats(exerciseType: exerciseType)
-                averagePace = cardioStats.averagePace
-                averageCalories = cardioStats.averageCalories
-                personalBestPace = cardioStats.personalBestPace
-                personalBestCalories = cardioStats.personalBestCalories
                 
             case .strength:
                     // Define predicate and descriptor for Strength
@@ -130,11 +139,6 @@ import SwiftData
                     reps = 12
                     weight = 0.0
                 }
-                
-                    // Retrieve average and personal best values for the exercise selected.
-                let strengthStats = StrengthStats(exerciseType: exerciseType)
-                averageTotalWeight = strengthStats.averageTotalWeight
-                personalBestTotalWeight = strengthStats.personalBestTotalWeight
         }
     }
     

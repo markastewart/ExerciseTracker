@@ -165,7 +165,7 @@ struct CardioHistoricalSection: View {
         .cornerRadius(18)
         .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
     }
-}h 
+}
 
 struct StrengthDetailsSection: View {
     @Bindable var viewModel: ExerciseEntryViewModel
