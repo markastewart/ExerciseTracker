@@ -122,6 +122,7 @@ struct CardioDetailsSection: View {
                 .keyboardType(.decimalPad)
         }
         Text("Pace (mph): \(viewModel.calculatedPace, specifier: "%.2f")")
+            .foregroundStyle(.secondary)
     }
 }
 
@@ -164,18 +165,7 @@ struct CardioHistoricalSection: View {
         .cornerRadius(18)
         .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
     }
-}
-
-struct StrengthHistoricalSection: View {
-    @Bindable var viewModel: ExerciseEntryViewModel
-    
-    var body: some View {
-//        Text("Average Pace: \(viewModel.averagePace, specifier: "%.2f")")
-//        Text("Average Calories: \(viewModel.averageCalories)")
-//        Text("Personal Best Pace: \(viewModel.personalBestPace, specifier: "%.2f")")
-//        Text("Personal Best Calories: \(viewModel.personalBestCalories)")
-    }
-}
+}h 
 
 struct StrengthDetailsSection: View {
     @Bindable var viewModel: ExerciseEntryViewModel
@@ -199,6 +189,39 @@ struct StrengthDetailsSection: View {
             TextField("0", value: $viewModel.weight, formatter: NumberFormatter.inputDecimal(maxDigits: 1))
                 .keyboardType(.decimalPad)
         }
+        Text("Total Weight: \(viewModel.calculatedWeight, specifier: "%.2f")")
+            .foregroundStyle(.secondary)
+    }
+}
+
+struct StrengthHistoricalSection: View {
+    @Bindable var viewModel: ExerciseEntryViewModel
+    
+    var body: some View {
+        Grid(alignment: .trailing, horizontalSpacing: 25, verticalSpacing: 18) {
+            GridRow {
+                Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
+                Text("Average")
+                Text("Personal Best")
+            }
+            
+            Divider()
+                .gridCellUnsizedAxes(.horizontal)
+                .gridCellColumns(3)
+            
+            GridRow {
+                Text("Total Weight")
+                Text("\(viewModel.averageTotalWeight, specifier: "%.0f")")
+                Text("\(viewModel.personalBestTotalWeight, specifier: "%.0f")")
+            }
+        }
+        .font(.subheadline)
+        .foregroundColor(.primary)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(18)
+        .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
     }
 }
 

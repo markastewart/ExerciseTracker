@@ -38,8 +38,13 @@ import SwiftData
     var averageCalories: Int = 0
     var personalBestPace: Double = 0.0
     var personalBestCalories: Int = 0
+    var averageTotalWeight: Double = 0.0
+    var personalBestTotalWeight: Double = 0.0
     var calculatedPace: Double {
         calculatePace(totalDistance: distance, totalDuration: duration)
+    }
+    var calculatedWeight: Double {
+        calculateWeightLifted(weight: weight, sets: sets, reps: reps)
     }
     
     private let dataService = ExerciseDataService.shared
@@ -125,6 +130,11 @@ import SwiftData
                     reps = 12
                     weight = 0.0
                 }
+                
+                    // Retrieve average and personal best values for the exercise selected.
+                let strengthStats = StrengthStats(exerciseType: exerciseType)
+                averageTotalWeight = strengthStats.averageTotalWeight
+                personalBestTotalWeight = strengthStats.personalBestTotalWeight
         }
     }
     

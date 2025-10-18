@@ -32,8 +32,7 @@ final class CardioExercise : Exercise {
     }
 }
 
-// A statistics calculator initialized with a specific, filtered set of exercises. All requested calculations are available as computed properties.
-
+    // A statistics calculator initialized with a specific, filtered set of exercises. All requested calculations are available as computed properties.
 struct CardioStats {
     private let dataService = ExerciseDataService.shared
     private var filteredExercises: [CardioExercise] = []
@@ -66,8 +65,8 @@ struct CardioStats {
         }
         
         let totalCalories = measurableWorkouts.reduce(0) { $0 + $1.calories }
-        let count = measurableWorkouts.count
-        return totalCalories / count
+        let workoutCount = measurableWorkouts.count
+        return totalCalories / workoutCount
     }
     
 
@@ -83,7 +82,6 @@ struct CardioStats {
     
         // Retrieve personal best (highest) calorie count in a single session. Returns 0 if no exercises are present.
     var personalBestCalories: Int {
-            // Find the maximum calorie count
         return filteredExercises.map { $0.calories }.max() ?? 0
     }
 }
