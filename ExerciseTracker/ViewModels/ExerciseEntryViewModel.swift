@@ -78,12 +78,6 @@ import SwiftData
                 // Set the initial type to the most frequent one
             exerciseType = allTypes.first ?? ""
             loadLastEntry()
-            
-            let cardioStats = CardioStats(exerciseType: exerciseType)
-            averagePace = cardioStats.averagePace
-            averageCalories = cardioStats.averageCalories
-            personalBestPace = cardioStats.personalBestPace
-            personalBestCalories = cardioStats.personalBestCalories
         }
     }
     
@@ -109,6 +103,12 @@ import SwiftData
                     calories = 0
                     incline = 0.0
                 }
+                    // Retrieve average and personal best values for the exercise selected.
+                let cardioStats = CardioStats(exerciseType: exerciseType)
+                averagePace = cardioStats.averagePace
+                averageCalories = cardioStats.averageCalories
+                personalBestPace = cardioStats.personalBestPace
+                personalBestCalories = cardioStats.personalBestCalories
                 
             case .strength:
                     // Define predicate and descriptor for Strength

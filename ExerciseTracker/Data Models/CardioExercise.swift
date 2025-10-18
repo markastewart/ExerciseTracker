@@ -81,7 +81,7 @@ struct CardioStats {
         return validPaces.min() ?? 0.0
     }
     
-        // Finds the personal best (highest) calorie count burned in a single session. Returns nil if no exercises are present.
+        // Retrieve personal best (highest) calorie count in a single session. Returns 0 if no exercises are present.
     var personalBestCalories: Int {
             // Find the maximum calorie count
         return filteredExercises.map { $0.calories }.max() ?? 0
