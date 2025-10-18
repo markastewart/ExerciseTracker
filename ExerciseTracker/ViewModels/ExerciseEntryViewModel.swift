@@ -34,6 +34,14 @@ import SwiftData
     
     var isEditing: Bool { editingCardio != nil || editingStrength != nil }
     
+    var averagePace: Double = 0.0
+    var averageCalories: Int = 0
+    var personalBestPace: Double = 0.0
+    var personalBestCalories: Int = 0
+    var calculatedPace: Double {
+        calculatePace(totalDistance: distance, totalDuration: duration)
+    }
+    
     private let dataService = ExerciseDataService.shared
     private let defaultCardioTypes = ["Treadmill", "Stationary Bike", "Rower", "Elliptical"]
     private let defaultStrengthTypes = ["Ab Crunch", "Back Extension", "Bicep Curl", "Chest Press", "Chest Fly", "Inner Thigh Abductor", "Lat Pull", "Lat Raise", "Leg Curl", "Leg Extension", "Leg Press", "Rear Delt", "Seated Calf Raise", "Seated Row", "Shoulder Press", "Tricep Extension"]
@@ -70,6 +78,12 @@ import SwiftData
                 // Set the initial type to the most frequent one
             exerciseType = allTypes.first ?? ""
             loadLastEntry()
+            
+            let cardioStats = CardioStats(exerciseType: exerciseType)
+            averagePace = cardioStats.averagePace
+            averageCalories = cardioStats.averageCalories
+            personalBestPace = cardioStats.personalBestPace
+            personalBestCalories = cardioStats.personalBestCalories
         }
     }
     
