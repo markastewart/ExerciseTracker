@@ -32,6 +32,10 @@ final class CardioExercise : Exercise {
     }
 }
 
+func calculatePace (totalDistance: Double, totalDuration: Double) -> Double {
+     return (totalDistance / totalDuration) * 60
+}
+
     // A statistics calculator initialized with a specific, filtered set of exercises. All requested calculations are available as computed properties.
 struct CardioStats {
     private let dataService = ExerciseDataService.shared

@@ -194,7 +194,7 @@ struct StrengthDetailsSection: View {
             TextField("0", value: $viewModel.weight, formatter: NumberFormatter.inputDecimal(maxDigits: 1))
                 .keyboardType(.decimalPad)
         }
-        Text("Total Weight: \(viewModel.calculatedWeight, specifier: "%.2f")")
+        Text("Total Weight: \(viewModel.calculatedWeight, specifier: "%.1f")")
             .foregroundStyle(.secondary)
     }
 }

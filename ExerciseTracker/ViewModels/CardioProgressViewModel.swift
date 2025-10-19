@@ -117,7 +117,3 @@ struct AggregatedCardioData: ProgressData {
         )
     }
 }
-
-func calculatePace (totalDistance: Double, totalDuration: Double) -> Double {
-     return (totalDistance / totalDuration) * 60
-}

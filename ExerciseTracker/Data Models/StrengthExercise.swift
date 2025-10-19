@@ -30,6 +30,10 @@ final class StrengthExercise: Exercise {
     }
 }
 
+func calculateWeightLifted (weight: Double, sets: Int, reps: Int ) -> Double {
+    return weight * Double (sets * reps)
+}
+
     // A statistics calculator initialized with a specific, filtered set of exercises. All requested calculations are available as computed properties.
 struct StrengthStats {
     private let dataService = ExerciseDataService.shared

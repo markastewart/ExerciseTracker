@@ -105,7 +105,3 @@ struct AggregatedStrengthData: ProgressData {
         )
     }
 }
-
-func calculateWeightLifted (weight: Double, sets: Int, reps: Int ) -> Double {
-    return weight * Double (sets * reps)
-}

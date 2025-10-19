@@ -41,7 +41,7 @@ import SwiftData
     var averageTotalWeight: Double = 0.0
     var personalBestTotalWeight: Double = 0.0
     var calculatedPace: Double {
-        calculatePace(totalDistance: distance, totalDuration: duration)
+        return distance > 0 ? calculatePace(totalDistance: distance, totalDuration: duration) : 0.0
     }
     var calculatedWeight: Double {
         calculateWeightLifted(weight: weight, sets: sets, reps: reps)

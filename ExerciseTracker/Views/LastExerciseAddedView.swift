@@ -40,7 +40,7 @@ struct LastExerciseAddedView: View {
                                 HStack {
                                     Text("Duration: \(Int(cardio.duration)) min")
                                     Text("Distance: \(cardio.distance, specifier: "%.2f") mi")
-                                    Text("Pace: \(viewModel.pace, specifier: "%.2f") mi/hr")
+                                    Text("Pace: \(viewModel.pace, specifier: "%.2f") mph")
                                     Spacer()
                                 }
                                 
