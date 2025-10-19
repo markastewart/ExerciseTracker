@@ -106,13 +106,13 @@ struct CardioDetailsSection: View {
         HStack {
             Text("Duration (min):")
             Spacer()
-            TextField("0", value: $viewModel.duration, formatter: NumberFormatter.decimal(1))
+            TextField("0", value: $viewModel.duration, formatter: NumberFormatter.inputDecimal(maxDigits: 1))
                 .keyboardType(.decimalPad)
         }
         HStack {
             Text("Distance (miles):")
             Spacer()
-            TextField("0", value: $viewModel.distance, formatter: NumberFormatter.decimal(2))
+            TextField("0", value: $viewModel.distance, formatter: NumberFormatter.inputDecimal(maxDigits: 2))
                 .keyboardType(.decimalPad)
         }
         HStack {
@@ -124,7 +124,7 @@ struct CardioDetailsSection: View {
         HStack {
             Text("Incline (%):")
             Spacer()
-            TextField("0", value: $viewModel.incline, formatter: NumberFormatter.decimal(1))
+            TextField("0", value: $viewModel.incline, formatter: NumberFormatter.inputDecimal(maxDigits: 1))
                 .keyboardType(.decimalPad)
         }
         Text("Pace (mph): \(viewModel.calculatedPace, specifier: "%.2f")")
