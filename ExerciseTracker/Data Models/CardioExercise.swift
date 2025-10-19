@@ -78,10 +78,10 @@ struct CardioStats {
     var personalBestPace: Double {
         let validPaces = filteredExercises
             .filter { $0.distance > 0.0 && $0.duration > 0.0 }
-            .map { $0.duration / $0.distance }
+            .map { $0.distance / ( $0.duration / 60 ) }
         
             // Find minimum pace (the fastest time)
-        return validPaces.min() ?? 0.0
+        return validPaces.max() ?? 0.0
     }
     
         // Retrieve personal best (highest) calorie count in a single session. Returns 0 if no exercises are present.
