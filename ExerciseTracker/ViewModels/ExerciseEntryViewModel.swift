@@ -85,19 +85,12 @@ import SwiftData
             loadLastEntry()
         }
         
+            // Calculate history data.
         if exerciseMode == .cardio {
-                // Retrieve average and personal best values for the exercise selected.
-            let cardioStats = CardioStats(exerciseType: exerciseType)
-            averagePace = cardioStats.averagePace
-            averageCalories = cardioStats.averageCalories
-            personalBestPace = cardioStats.personalBestPace
-            personalBestCalories = cardioStats.personalBestCalories
+            calculateCardioHistory()
         }
-            // Retrieve average and personal best values for the exercise selected.
         else {
-            let strengthStats = StrengthStats(exerciseType: exerciseType)
-            averageTotalWeight = strengthStats.averageTotalWeight
-            personalBestTotalWeight = strengthStats.personalBestTotalWeight
+            calculateStrengthHistory()
         }
     }
     
@@ -216,5 +209,19 @@ import SwiftData
             }
         }
         allTypes = sortedTypes
+    }
+    
+    func calculateCardioHistory() {
+        let cardioStats = CardioStats(exerciseType: exerciseType)
+        averagePace = cardioStats.averagePace
+        averageCalories = cardioStats.averageCalories
+        personalBestPace = cardioStats.personalBestPace
+        personalBestCalories = cardioStats.personalBestCalories
+    }
+    
+    func calculateStrengthHistory() {
+        let strengthStats = StrengthStats(exerciseType: exerciseType)
+        averageTotalWeight = strengthStats.averageTotalWeight
+        personalBestTotalWeight = strengthStats.personalBestTotalWeight
     }
 }

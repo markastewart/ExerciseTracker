@@ -82,6 +82,10 @@ struct ExerciseEntryView: View {
                 }
             }
         }
+            // Recreate exercise history when user changes exercise mode regardless of new entry or edit.
+        .onChange(of: viewModel.exerciseType) {
+            (viewModel.mode == .cardio ? viewModel.calculateCardioHistory : viewModel.calculateStrengthHistory)()
+        }
         .alert("Delete Entry", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
                 viewModel.deleteExercise()
